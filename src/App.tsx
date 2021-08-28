@@ -2,6 +2,8 @@ import { createTheme, CssBaseline, Switch, ThemeProvider, useMediaQuery } from '
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
+const isDebug = chrome.storage === undefined;
+
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const theme = React.useMemo(
@@ -74,10 +76,12 @@ function EnabledSwitch() {
 
 
   useEffect(() => {
-    chrome.storage.sync.get('enabled', (data) => {
-      console.log(data);
-      setEnabled(data.enabled);
-    });
+    if (!isDebug) {
+      chrome.storage.sync.get('enabled', (data) => {
+        console.log(data);
+        setEnabled(data.enabled);
+      });
+    }
   });
 
 
@@ -87,11 +91,13 @@ function EnabledSwitch() {
       checked={enabled ?? true}
       name="switchEnabled"
       onChange={(event) => {
-        if (enabled === null) {
+        if (enabled === null && !isDebug) {
           // It was not loaded
           return;
         }
-        chrome.storage.sync.set({ enabled: event.target.checked });
+        if (!isDebug) {
+          chrome.storage.sync.set({ enabled: event.target.checked });
+        }
         setEnabled(event.target.checked);
       }}
     />
