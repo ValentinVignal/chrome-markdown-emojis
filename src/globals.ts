@@ -1,0 +1,1 @@
+export const isDebug = chrome.storage === undefined;
