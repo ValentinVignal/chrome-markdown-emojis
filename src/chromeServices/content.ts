@@ -9,8 +9,9 @@ document.addEventListener("click", function () {
 }, false);
 
 
-document.addEventListener('keypress', (event) => {
-	console.log('key is pressed', event);
+document.addEventListener('keypress', (event: KeyboardEvent) => {
+	console.log('key is pressed', (event.target as HTMLInputElement).value, event.key);
+
 });
 
 
