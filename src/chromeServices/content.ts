@@ -1,18 +1,39 @@
-
-
-console.log('content.js loaded');
-
-
-document.addEventListener("click", function () {
-	// Do what you want with click event\
-	console.log('click', Date.now());
-}, false);
-
-
-document.addEventListener('keypress', (event: KeyboardEvent) => {
-	console.log('key is pressed', (event.target as HTMLInputElement).value, event.key);
-
+document.addEventListener('keyup', (event: KeyboardEvent) => {
+	try {
+		const target = event.target as HTMLInputElement;
+		const value = target.value;
+		if (!(value.length && value.endsWith(': '))) {
+			// It should not be empty and the last value should be 
+			return;
+		}
+		const splits = value.split(' ')
+		const lastWord = splits[splits.length - 2];
+		if (!(lastWord.startsWith(':') || !lastWord.endsWith(':'))) {
+			// It should have the format ":poop:"
+			return;
+		}
+		// It might be an emoji!
+		chrome.runtime.sendMessage({
+			type: 'parseEmoji',
+			value: lastWord.slice(1, lastWord.length - 1),
+		}, (response) => {
+			try {
+				if (response?.key && response.key !== response.emoji) {
+					const toReplace = `:${response.key}:`;
+					const splits = value.split(toReplace);
+					if (!(splits.length >= 2)) return;
+					const newValue = [...splits.slice(0, splits.length - 2), splits.slice(splits.length - 2).join(response.emoji)].join(toReplace);
+					target.value = newValue;
+				}
+			} catch (error) {
+				console.log('error receiving the message', response, error);
+			}
+		});
+	} catch (error) {
+		console.log('error listening to keyup', error);
+	}
 });
+
 
 
 export { };
