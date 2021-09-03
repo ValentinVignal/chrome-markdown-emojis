@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Chrome Emojis",
+  "name": "Chrome markdown emojis",
+  "description": "Allow to use markdown emojis code like :tada: in text inputs",
   "manifest_version": 3,
   "version": "0.1",
   "action": {
