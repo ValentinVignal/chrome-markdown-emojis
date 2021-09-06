@@ -1,4 +1,4 @@
-import { Message, MessageTypes, ParseFullEmojiResponse } from "../types";
+import { Message, MessageTypes, ParseFullEmojiResponse, PartialEmojiResponse } from "../types";
 
 
 const emojisMapUrl = 'https://raw.githubusercontent.com/markdown-it/markdown-it-emoji/master/lib/data/full.json';
@@ -20,13 +20,19 @@ chrome.runtime.onMessage.addListener(onMessage);
 
 function onMessage(request: Message, sender: any, sendResponse: (response: any) => void) {
 	if (!emojisMap) return;
+	let key: string;
 	switch (request.type) {
 		case MessageTypes.ParseFullEmoji:
-			if (request.type === MessageTypes.ParseFullEmoji) {
-				const key = request.text;
-				const emoji = emojisMap[key];
-				sendResponse({ key, emoji } as ParseFullEmojiResponse);
-			}
+			key = request.text;
+			const emoji = emojisMap[key];
+			sendResponse({ key, emoji } as ParseFullEmojiResponse);
+			break;
+		case MessageTypes.PartialEmoji:
+			key = request.text;
+			sendResponse({
+				key,
+				emojis: Object.fromEntries(Object.entries(emojisMap).filter(([fullKey, value]) => fullKey.startsWith(key))),
+			} as PartialEmojiResponse)
 			break;
 	}
 

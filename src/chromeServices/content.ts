@@ -1,4 +1,4 @@
-import { Message, MessageTypes, ParseFullEmojiResponse } from '../types';
+import { Message, MessageTypes, ParseFullEmojiResponse, PartialEmojiResponse } from '../types';
 
 document.addEventListener('keyup', onKeyUp);
 
@@ -20,22 +20,33 @@ function onKeyUp(event: KeyboardEvent): void {
 
   if (!couldBeFullEmoji && !couldBePartialEmoji) return; // Nothing to do
 
-  if (couldBeFullEmoji) {
-    // It might be an emoji!
-    try {
+  try {
+    if (couldBeFullEmoji) {
+      // It might be an emoji!
       chrome.runtime.sendMessage<Message, ParseFullEmojiResponse>({
         type: MessageTypes.ParseFullEmoji,
         text: fullEmojiMatch[0].split(':')[1],
-      } as Message, (response: ParseFullEmojiResponse) => {
+      }, (response) => {
         try {
           parseFullEmojiResponseCallback(target, text, response);
         } catch (error) {
           console.log('Error receiving the message', response, error);
         }
       });
-    } catch (error) {
-      console.log('Error listening to keyup', error);
+    } else if (couldBePartialEmoji) {
+      chrome.runtime.sendMessage<Message, PartialEmojiResponse>({
+        type: MessageTypes.PartialEmoji,
+        text: partialEmojiMatch[0].split(':')[1],
+      }, (response) => {
+        try {
+          partialEmojiResponseCallback(target, text, response);
+        } catch (error) {
+          console.log('Error receiving the message', response, error);
+        }
+      })
     }
+  } catch (error) {
+    console.log('Error listening to keyup', error);
   }
 }
 
@@ -49,6 +60,12 @@ function parseFullEmojiResponseCallback(target: EventTarget, text: string, respo
     if (!(splits.length >= 2)) return;
     const newValue = [...splits.slice(0, splits.length - 2), splits.slice(splits.length - 2).join(response.emoji)].join(toReplace);
     setText(target, text, newValue);
+  }
+}
+
+function partialEmojiResponseCallback(target: EventTarget, text: string, response: PartialEmojiResponse) {
+  if (response?.key && response.emojis && Object.keys(response.emojis).length) {
+    console.log('partial emoji response', response.emojis)
   }
 }
 
