@@ -1,34 +1,9 @@
-import { createTheme, CssBaseline, ThemeProvider, useMediaQuery } from '@material-ui/core';
+import {
+  createTheme, CssBaseline, ThemeProvider, useMediaQuery
+} from '@material-ui/core';
 import React from 'react';
 import './App.css';
 import EnabledSwitch from './Components/EnableSwitch';
-
-
-function App() {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const theme = React.useMemo(
-    () =>
-      createTheme({
-        palette: {
-          type: prefersDarkMode ? 'dark' : 'light',
-        },
-      }),
-    [prefersDarkMode],
-  );
-  return (
-    <div className="App" color={theme.palette.background.paper}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Body />
-
-
-      </ThemeProvider>
-    </div>
-  );
-}
-
-export default App;
-
 
 function Body() {
   // const [title, setTitle] = React.useState('');
@@ -61,7 +36,6 @@ function Body() {
     // });
   });
 
-
   return (
     <div>
       <h1>Chrome Markdown emojis</h1>
@@ -71,3 +45,25 @@ function Body() {
   );
 }
 
+function App() {
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const theme = React.useMemo(
+    () => createTheme({
+      palette: {
+        type: prefersDarkMode ? 'dark' : 'light',
+      },
+    }),
+    [prefersDarkMode],
+  );
+  return (
+    <div className="App" color={theme.palette.background.paper}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Body />
+
+      </ThemeProvider>
+    </div>
+  );
+}
+
+export default App;

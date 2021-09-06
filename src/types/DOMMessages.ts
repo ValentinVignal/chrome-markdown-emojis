@@ -1,8 +1,15 @@
-export type DOMMessage = {
-	type: 'GET_DOM'
+export type Message = {
+	type: MessageTypes;
+	text: string;
+
 }
 
-export type DOMMessageResponse = {
-	title: string;
-	headlines: string[];
+
+export enum MessageTypes {
+	ParseFullEmoji,
+}
+
+export type ParseFullEmojiResponse = {
+	key?: string;
+	emoji?: string;
 }

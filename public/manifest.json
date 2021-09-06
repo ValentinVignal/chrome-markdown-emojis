@@ -1,9 +1,9 @@
 {
   "short_name": "Chrome Emojis",
   "name": "Chrome markdown emojis",
-  "description": "Allow to use markdown emojis code like :tada: in text inputs",
+  "description": "Allow to use markdown emojis code like :tada: 🎉  in text inputs",
   "manifest_version": 3,
-  "version": "0.1",
+  "version": "0.2",
   "action": {
     "default_popup": "index.html",
     "default_title": "Open the popup"
@@ -14,8 +14,6 @@
     "128": "logo192.png"
   },
   "permissions": [
-    "activeTab",
-    "scripting",
     "storage"
   ],
   "content_scripts": [
