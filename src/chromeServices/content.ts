@@ -1,6 +1,32 @@
 import { Message, MessageTypes, ParseFullEmojiResponse, PartialEmojiResponse } from '../types';
 
-document.addEventListener('keyup', onKeyUp);
+chrome.storage.sync.get('enabled', (data) => {
+  if (data.enabled) {
+    activate();
+  }
+});
+
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  console.log('on change', changes);
+  if (namespace === 'sync') {
+    if (changes.enabled?.newValue) {
+      activate()
+    } else {
+      deactivate();
+    }
+  }
+})
+
+function activate() {
+  document.addEventListener('keyup', onKeyUp);
+  console.log('activate');
+}
+
+function deactivate() {
+  document.removeEventListener('keyup', onKeyUp);
+  removeDropDown();
+  console.log('deactivate');
+}
 
 
 /**
