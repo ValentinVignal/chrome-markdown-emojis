@@ -58,7 +58,7 @@ function onKeyUp(event: KeyboardEvent): void {
         text: fullEmojiMatch[0].split(':')[1],
       }, (response) => {
         try {
-          parseFullEmojiResponseCallback(text, response);
+          parseFullEmojiResponseCallback(response);
         } catch (error) {
           console.log('Error receiving the message', response, error);
         }
@@ -83,7 +83,13 @@ function onKeyUp(event: KeyboardEvent): void {
 
 
 
-function parseFullEmojiResponseCallback(text: string, response: ParseFullEmojiResponse) {
+/**
+ * 
+ * @param text 
+ * @param response 
+ * @returns 
+ */
+function parseFullEmojiResponseCallback(response: ParseFullEmojiResponse) {
   if (response?.key && response.key !== response.emoji) {
     const toReplace = `:${response.key}:`;
     const splits = text.split(toReplace);
@@ -94,6 +100,11 @@ function parseFullEmojiResponseCallback(text: string, response: ParseFullEmojiRe
 }
 
 
+/**
+ * @description Callback called when the partial emoji response is received
+ * @param text 
+ * @param response 
+ */
 function partialEmojiResponseCallback(text: string, response: PartialEmojiResponse) {
   console.log('partial emoji response', response.emojis, target);
   emojis = response.emojis ?? {};
@@ -102,20 +113,19 @@ function partialEmojiResponseCallback(text: string, response: PartialEmojiRespon
 
 const dropDownWidth = 200;
 const dropDownHeight = 150;
-const padding = 16;
+const padding = 8;
 
 type TopBottom = { top?: number | null, bottom?: number | null };
 
 function findDropdownTopBottom(): TopBottom {
   if (target === null) return {};
   const targetRect = target.offsetParent!.getBoundingClientRect();
-  const windowRect = document.body.getBoundingClientRect();
 
-  // TODO: It would be better to get also the rect targetRect and check its position in the parent
   if (targetRect.top - dropDownHeight <= 0) {
-    return { top: targetRect.height };
+    return { top: target.offsetTop + target.offsetHeight + padding };
   } else {
-    return { bottom: targetRect.height };
+    const offsetParent = target.offsetParent! as HTMLElement;
+    return { bottom: offsetParent.offsetHeight - target.offsetTop + padding };
   }
 }
 
