@@ -142,16 +142,17 @@ const dropDownHeight = 150;
 const padding = 8;
 
 type TopBottom = { top?: number | null, bottom?: number | null };
+type XY = { x: number | null, y: number | null };
 
-function findDropdownTopBottom(): TopBottom {
-  if (target === null) return {};
-  const targetRect = target.offsetParent!.getBoundingClientRect();
+function findDropdownTopBottom(): XY {
+  const targetRect = target!.getBoundingClientRect();
+  console.log('targetHeight', targetRect);
 
-  if (targetRect.top - dropDownHeight <= 0) {
-    return { top: target.offsetTop + target.offsetHeight + padding };
+  if (targetRect.top - dropDownHeight > 0) {
+    return { x: targetRect.x, y: targetRect.y - dropDownHeight - padding };
   } else {
-    const offsetParent = target.offsetParent! as HTMLElement;
-    return { bottom: offsetParent.offsetHeight - target.offsetTop + padding };
+    console.log('2');
+    return { x: targetRect.x, y: targetRect.bottom + padding };
   }
 }
 
@@ -171,27 +172,14 @@ function rebuildDropdown() {
     return removeDropDown();
   }
 
-  const parent = target.parentNode as HTMLElement;
   if (!dropDown) {
     dropDown = document.createElement('ul');
     dropDown.setAttribute('id', dropdownId);
-    let topBottom: TopBottom | null = null;
-    try {
-      topBottom = findDropdownTopBottom();
-    } catch (e) {
-      console.log('error find rect', e, target, text);
-    }
-    let style = `overflow: auto; z-index: 30; position: absolute;  width: ${dropDownWidth}px; max-height: ${dropDownHeight}px;`;
-    if (topBottom !== null) {
-      if (topBottom.top !== undefined) {
-        style += `top: ${topBottom.top}px;`;
-      } else if (topBottom.bottom !== undefined) {
-        style += `bottom: ${topBottom.bottom}px;`;
-      }
-    }
+    const xY = findDropdownTopBottom();
+    let style = `overflow: auto; z-index: 50; position: fixed;  width: ${dropDownWidth}px; max-height: ${dropDownHeight}px; top: ${xY.y}px; left: ${xY.x}px;`;
     // TODO: Use scss file for this
     dropDown.setAttribute('style', style)
-    parent.appendChild(dropDown);
+    document.body.appendChild(dropDown);
   } else {
     // Remove existing options
     while (dropDown.firstChild) {
