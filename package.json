@@ -21,9 +21,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "INLINE_RUNTIME_CHUNK=false craco build",
+    "build": "INLINE_RUNTIME_CHUNK=false craco build && npm run scss-content",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "scss-content": "node-sass ./src/content/ -o ./build/static/css/",
+    "scss-content:watch": "node-sass --watch ./src/content/ -o ./build/static/css/"
   },
   "eslintConfig": {
     "extends": [
@@ -50,6 +52,7 @@
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.24.2",
+    "node-sass": "^5.0.0",
     "typescript": "^4.4.2"
   }
 }

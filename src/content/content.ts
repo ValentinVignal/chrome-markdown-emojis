@@ -180,7 +180,7 @@ function rebuildDropdown() {
     dropDown = document.createElement('ul');
     dropDown.setAttribute('id', dropdownId);
     const xY = findDropdownTopBottom();
-    let style = `overflow: auto; z-index: 50; position: fixed;  width: ${dropDownWidth}px; max-height: ${dropDownHeight}px;left: ${xY.x}px;`;
+    let style = `left: ${xY.x}px;`;
     if (xY.top !== undefined) {
       style += `top: ${xY.top}px;`;
     } else if (xY.bottom !== undefined) {

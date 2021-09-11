@@ -23,6 +23,9 @@
       ],
       "js": [
         "./static/js/content.js"
+      ],
+      "css": [
+        "./static/css/content.css"
       ]
     }
   ],

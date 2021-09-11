@@ -1,0 +1,23 @@
+
+#chromeMarkdownEmojiDropdownId {
+	overflow: auto;
+	z-index: 100;
+	position: fixed;
+	width: 200px;
+	max-height: 150px;
+	background-color: gray;
+	border-radius: 4px;
+	border-width: thin;
+	border-color: black;
+	color: rgba(255, 255, 255, 0.7);
+	box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.chromeMarkdownEmojiDropdownOptionClassName {
+	padding: 2px 8px 2px 8px;
+	cursor: pointer;
+	&:hover {
+		background-color: blue;
+		color: white;
+	}
+}
