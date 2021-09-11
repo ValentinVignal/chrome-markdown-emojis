@@ -17,11 +17,11 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
 });
 
 
-function activate() {
+function activate(): void {
   document.addEventListener('keyup', onKeyUp);
 }
 
-function deactivate() {
+function deactivate(): void {
   document.removeEventListener('keyup', onKeyUp);
   removeDropdown();
 }
@@ -121,8 +121,9 @@ function onKeyUp(event: KeyboardEvent): void {
  * @param response 
  * @returns 
  */
-function parseFullEmojiResponseCallback(response: ParseFullEmojiResponse) {
-  if (response?.key && response.key !== response.emoji) {
+function parseFullEmojiResponseCallback(response: ParseFullEmojiResponse): void {
+  if (response?.key && response.emoji && response.key !== response.emoji) {
+    console.log('full emoji response', response);
     const toReplace = `:${response.key}:`;
     const splits = text.split(toReplace);
     if (!(splits.length >= 2)) return;
@@ -137,13 +138,12 @@ function parseFullEmojiResponseCallback(response: ParseFullEmojiResponse) {
  * @param text 
  * @param response 
  */
-function partialEmojiResponseCallback(text: string, response: PartialEmojiResponse) {
+function partialEmojiResponseCallback(text: string, response: PartialEmojiResponse): void {
   console.log('partial emoji response', response.emojis, target);
   emojis = response.emojis ?? {};
   rebuildDropdown();
 }
 
-const dropDownWidth = 200;
 const dropDownHeight = 150;
 const padding = 8;
 
@@ -160,7 +160,7 @@ function findDropdownTopBottom(): XY {
   }
 }
 
-function removeDropdown() {
+function removeDropdown(): void {
   if (!!dropDown) {
     // Remove it
     dropDown.remove();
@@ -171,7 +171,7 @@ function removeDropdown() {
 
 
 
-function rebuildDropdown() {
+function rebuildDropdown(): void {
   if ((!target || !Object.keys(emojis).length)) {
     return removeDropdown();
   }
