@@ -7,7 +7,6 @@ chrome.storage.sync.get('enabled', (data) => {
 });
 
 chrome.storage.onChanged.addListener((changes, namespace) => {
-  console.log('on change', changes);
   if (namespace === 'sync') {
     if (changes.enabled?.newValue) {
       activate()
@@ -15,17 +14,16 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
       deactivate();
     }
   }
-})
+});
+
 
 function activate() {
   document.addEventListener('keyup', onKeyUp);
-  console.log('activate');
 }
 
 function deactivate() {
   document.removeEventListener('keyup', onKeyUp);
-  removeDropDown();
-  console.log('deactivate');
+  removeDropdown();
 }
 
 
@@ -59,6 +57,14 @@ const partialEmojiRegExp = new RegExp(/( |^):([a-z0-9]|_|\+|-)*$/gm);
  * @returns
  */
 function onKeyUp(event: KeyboardEvent): void {
+  if (event.key === 'Escape') {
+    return removeDropdown();
+  }
+  if (!event.key.match(/^([a-zA-Z0-9]|_|\+| |:|-){1}$/gm)?.length) {
+    // It is not an accepted character, don't do anything
+  }
+
+
   const _target = event.target;
 
   if (!_target || !(_target instanceof HTMLElement)) {
@@ -72,7 +78,7 @@ function onKeyUp(event: KeyboardEvent): void {
   const couldBeFullEmoji = !!fullEmojiMatch?.length;
   const couldBePartialEmoji = !!partialEmojiMatch?.length;
 
-  if (!couldBePartialEmoji) removeDropDown();
+  if (!couldBePartialEmoji) removeDropdown();
   if (!couldBeFullEmoji && !couldBePartialEmoji) return; // Nothing to do
 
   try {
@@ -102,7 +108,7 @@ function onKeyUp(event: KeyboardEvent): void {
       })
     }
   } catch (error) {
-    removeDropDown();
+    removeDropdown();
     console.log('Error listening to keyup', error);
   }
 }
@@ -141,22 +147,20 @@ const dropDownWidth = 200;
 const dropDownHeight = 150;
 const padding = 8;
 
-type TopBottom = { top?: number | null, bottom?: number | null };
-type XY = { x: number | null, y: number | null };
+type XY = { x: number, top?: number | null, bottom?: number | null };
 
 function findDropdownTopBottom(): XY {
   const targetRect = target!.getBoundingClientRect();
-  console.log('targetHeight', targetRect);
 
   if (targetRect.top - dropDownHeight > 0) {
-    return { x: targetRect.x, y: targetRect.y - dropDownHeight - padding };
+    return { x: targetRect.x, bottom: document.body.clientHeight - targetRect.y };
   } else {
     console.log('2');
-    return { x: targetRect.x, y: targetRect.bottom + padding };
+    return { x: targetRect.x, top: targetRect.bottom + padding };
   }
 }
 
-function removeDropDown() {
+function removeDropdown() {
   if (!!dropDown) {
     // Remove it
     dropDown.remove();
@@ -169,14 +173,19 @@ function removeDropDown() {
 
 function rebuildDropdown() {
   if ((!target || !Object.keys(emojis).length)) {
-    return removeDropDown();
+    return removeDropdown();
   }
 
   if (!dropDown) {
     dropDown = document.createElement('ul');
     dropDown.setAttribute('id', dropdownId);
     const xY = findDropdownTopBottom();
-    let style = `overflow: auto; z-index: 50; position: fixed;  width: ${dropDownWidth}px; max-height: ${dropDownHeight}px; top: ${xY.y}px; left: ${xY.x}px;`;
+    let style = `overflow: auto; z-index: 50; position: fixed;  width: ${dropDownWidth}px; max-height: ${dropDownHeight}px;left: ${xY.x}px;`;
+    if (xY.top !== undefined) {
+      style += `top: ${xY.top}px;`;
+    } else if (xY.bottom !== undefined) {
+      style += `bottom: ${xY.bottom}px;`
+    }
     // TODO: Use scss file for this
     dropDown.setAttribute('style', style)
     document.body.appendChild(dropDown);
