@@ -123,7 +123,6 @@ function onKeyUp(event: KeyboardEvent): void {
  */
 function parseFullEmojiResponseCallback(response: ParseFullEmojiResponse): void {
   if (response?.key && response.emoji && response.key !== response.emoji) {
-    console.log('full emoji response', response);
     const toReplace = `:${response.key}:`;
     const splits = text.split(toReplace);
     if (!(splits.length >= 2)) return;
@@ -153,9 +152,8 @@ function findDropdownTopBottom(): XY {
   const targetRect = target!.getBoundingClientRect();
 
   if (targetRect.top - dropDownHeight > 0) {
-    return { x: targetRect.x, bottom: document.body.clientHeight - targetRect.y };
+    return { x: targetRect.x, bottom: window.innerHeight - targetRect.y + padding };
   } else {
-    console.log('2');
     return { x: targetRect.x, top: targetRect.bottom + padding };
   }
 }
@@ -175,29 +173,22 @@ function rebuildDropdown(): void {
   if ((!target || !Object.keys(emojis).length)) {
     return removeDropdown();
   }
-
-  if (!dropDown) {
-    dropDown = document.createElement('ul');
-    dropDown.setAttribute('id', dropdownId);
-    const xY = findDropdownTopBottom();
-    let style = `left: ${xY.x}px;`;
-    if (xY.top !== undefined) {
-      style += `top: ${xY.top}px;`;
-    } else if (xY.bottom !== undefined) {
-      style += `bottom: ${xY.bottom}px;`
-    }
-    // TODO: Use scss file for this
-    dropDown.setAttribute('style', style)
-    document.body.appendChild(dropDown);
-  } else {
-    // Remove existing options
-    while (dropDown.firstChild) {
-      dropDown.removeChild(dropDown.lastChild!);
-    }
+  if (dropDown) {
+    removeDropdown();
   }
+  dropDown = document.createElement('ul');
+  dropDown.setAttribute('id', dropdownId);
+  const xY = findDropdownTopBottom();
+  let style = `left: ${xY.x}px;`;
+  if (xY.top !== undefined) {
+    style += `top: ${xY.top}px;`;
+  } else if (xY.bottom !== undefined) {
+    style += `bottom: ${xY.bottom}px;`
+  }
+  dropDown.setAttribute('style', style)
+  document.body.appendChild(dropDown);
   for (let key in emojis) {
     const option = document.createElement('li');
-    // TODO: add padding and stuff to scss
     option.className = dropdownOptionClassName;
     option.innerText = `${emojis[key]}  ${key}`;
     dropDown.appendChild(option);
