@@ -135,12 +135,16 @@ function onKeyUp(event: KeyboardEvent): void {
  */
 function parseFullEmojiResponseCallback(response: ParseFullEmojiResponse): void {
   if (response?.key && response.emoji && response.key !== response.emoji) {
-    const toReplace = `:${response.key}:`;
-    const splits = text.split(toReplace);
-    if (!(splits.length >= 2)) return;
-    const newValue = [...splits.slice(0, splits.length - 2), splits.slice(splits.length - 2).join(response.emoji)].join(toReplace);
-    setText(newValue);
+    replaceEmoji(`:${response.key}:`, response.emoji);
   }
+}
+
+function replaceEmoji(toReplace: string, emoji: string): void {
+  const splits = text.split(toReplace);
+  if (!(splits.length >= 2)) return;
+  const newValue = [...splits.slice(0, splits.length - 2), splits.slice(splits.length - 2).join(emoji)].join(toReplace);
+  setText(newValue);
+
 }
 
 
@@ -203,6 +207,12 @@ function rebuildDropdown(): void {
     const option = document.createElement('li');
     option.className = dropdownOptionClassName;
     option.innerText = `${emojis[key]}  ${key}`;
+    option.onclick = () => {
+      const splits = text.split(':');
+      replaceEmoji(`:${splits[splits.length - 1]}`, `${emojis[key]} `);
+      removeDropdown();
+      target?.focus();
+    }
     dropDown.appendChild(option);
   }
 }
