@@ -19,10 +19,14 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
 
 function activate(): void {
   document.addEventListener('keyup', onKeyUp);
+  document.addEventListener('scroll', onScroll);
+  window.addEventListener('resize', onResizeWindow);
 }
 
 function deactivate(): void {
   document.removeEventListener('keyup', onKeyUp);
+  document.removeEventListener('scroll', onScroll);
+  window.removeEventListener('resize', onResizeWindow);
   removeDropdown();
 }
 
@@ -48,6 +52,14 @@ let emojis: { [key: string]: string } = {};
 
 const fullEmojiRegExp = new RegExp(/( |^):([a-z0-9]|_|\+|-)*: $/gm);
 const partialEmojiRegExp = new RegExp(/( |^):([a-z0-9]|_|\+|-)*$/gm);
+
+function onScroll(): void {
+  removeDropdown();
+}
+
+function onResizeWindow(): void {
+  removeDropdown();
+}
 
 /**
  *
