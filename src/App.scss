@@ -1,9 +1,18 @@
 h1 {
   font-size: 20px;
+  text-align: center;
+}
+
+h2 {
+  text-align: center;
 }
 
 .row {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.App {
+  padding: 16px;
 }

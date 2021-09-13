@@ -1,17 +1,33 @@
+import { Settings } from '../shared/constants';
 import { Message, MessageTypes, ParseFullEmojiResponse, PartialEmojiResponse } from '../types';
 
-chrome.storage.sync.get('enabled', (data) => {
+chrome.storage.sync.get([Settings.enabled, Settings.dropdownEnabled], (data) => {
+  if (data.enabled) {
+    activate();
+  }
+  dropdownEnabled = data.dropdownEnabled;
+});
+
+chrome.storage.sync.get(Settings.dropdownEnabled, (data) => {
   if (data.enabled) {
     activate();
   }
 });
 
 chrome.storage.onChanged.addListener((changes, namespace) => {
+  console.log('changes', changes);
   if (namespace === 'sync') {
-    if (changes.enabled?.newValue) {
-      activate()
-    } else {
-      deactivate();
+    if (changes.enabled) {
+      if (changes.enabled?.newValue) {
+        activate()
+      } else {
+        deactivate();
+      }
+    } else if (changes.dropdownEnabled) {
+      dropdownEnabled = changes.dropdownEnabled.newValue;
+      if (!changes.dropdownEnabled?.newValue) {
+        removeDropdown();
+      }
     }
   }
 });
@@ -29,6 +45,8 @@ function deactivate(): void {
   window.removeEventListener('resize', onResizeWindow);
   removeDropdown();
 }
+
+let dropdownEnabled = false;
 
 
 /**
@@ -109,7 +127,7 @@ function onKeyUp(event: KeyboardEvent): void {
           console.log('Error receiving the message', response, error);
         }
       });
-    } else if (couldBePartialEmoji) {
+    } else if (couldBePartialEmoji && dropdownEnabled) {
       chrome.runtime.sendMessage<Message, PartialEmojiResponse>({
         type: MessageTypes.PartialEmoji,
         text: partialEmojiMatch[0].split(':')[1],
