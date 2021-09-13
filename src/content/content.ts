@@ -42,6 +42,8 @@ let text: string = '';
 
 const dropdownId = 'chromeMarkdownEmojiDropdownId';
 const dropdownOptionClassName = 'chromeMarkdownEmojiDropdownOptionClassName';
+const dropdownEmojiSpanClassName = 'chromeMarkdownEmojiDropdownEmojiSpanClassName';
+const dropdownKeySpanClassName = 'chromeMarkdownEmojiDropdownKeySpanClassName';
 
 // TODO: Remove or move on scroll
 /**
@@ -205,13 +207,26 @@ function rebuildDropdown(): void {
   document.body.appendChild(dropDown);
   for (let key in emojis) {
     const option = document.createElement('li');
+    // Span Emoji
+    const spanEmoji = document.createElement('span');
+    const emoji = emojis[key];
+    spanEmoji.innerText = emoji;
+    spanEmoji.className = dropdownEmojiSpanClassName;
+    option.appendChild(spanEmoji);
+    // Span key
+    const spanKey = document.createElement('span');
+    spanKey.innerText = key;
+    spanKey.className = dropdownKeySpanClassName;
+    option.appendChild(spanKey);
+
     option.className = dropdownOptionClassName;
-    option.innerText = `${emojis[key]}  ${key}`;
+    const _text = text;
+    const _target = target;
     option.onclick = () => {
-      const splits = text.split(':');
-      replaceEmoji(`:${splits[splits.length - 1]}`, `${emojis[key]} `);
+      const splits = _text.split(':');
+      replaceEmoji(`:${splits[splits.length - 1]}`, `${emoji} `);
       removeDropdown();
-      target?.focus();
+      _target?.focus();
     }
     dropDown.appendChild(option);
   }
