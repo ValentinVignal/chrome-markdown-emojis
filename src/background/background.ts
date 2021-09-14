@@ -3,8 +3,14 @@ import { Message, MessageTypes, ParseFullEmojiResponse, PartialEmojiResponse } f
 
 const emojisMapUrl = 'https://raw.githubusercontent.com/markdown-it/markdown-it-emoji/master/lib/data/full.json';
 
+/**
+ * Map of emojis: emoji code => emoji
+ */
 let emojisMap: { [key: string]: string };
 
+/**
+ * Downloads the emoji map
+ */
 async function fetchEmojisMap(): Promise<void> {
 	try {
 		const response = await fetch(emojisMapUrl);
@@ -35,7 +41,6 @@ function onMessage(request: Message, sender: any, sendResponse: (response: any) 
 			} as PartialEmojiResponse)
 			break;
 	}
-
 }
 
 export { };
