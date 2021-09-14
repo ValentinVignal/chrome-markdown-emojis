@@ -1,52 +1,71 @@
 import { Settings } from '../shared/constants';
 import { Message, MessageTypes, ParseFullEmojiResponse, PartialEmojiResponse } from '../types';
 
-chrome.storage.sync.get([Settings.enabled, Settings.dropdownEnabled], (data) => {
-  if (data.enabled) {
-    activate();
-  }
-  dropdownEnabled = data.dropdownEnabled;
+chrome.storage.sync.get([Settings.Enabled, Settings.DropdownEnabled], (data) => {
+  enabled = data[Settings.Enabled] ?? true;
+  activate();
 });
 
-chrome.storage.sync.get(Settings.dropdownEnabled, (data) => {
-  if (data.enabled) {
-    activate();
-  }
+chrome.storage.sync.get(Settings.DropdownEnabled, (data) => {
+  dropdownEnabled = data[Settings.DropdownEnabled] ?? true;
+  activate();
+});
+
+chrome.storage.sync.get(Settings.ExcludedWebsites, (data) => {
+  setExcludedWebsites(data[Settings.ExcludedWebsites] ?? []);
 });
 
 chrome.storage.onChanged.addListener((changes, namespace) => {
-  console.log('changes', changes);
   if (namespace === 'sync') {
-    if (changes.enabled) {
-      if (changes.enabled?.newValue) {
+    if (changes[Settings.Enabled]) {
+      if (changes[Settings.Enabled]?.newValue) {
         activate()
       } else {
         deactivate();
       }
-    } else if (changes.dropdownEnabled) {
-      dropdownEnabled = changes.dropdownEnabled.newValue;
-      if (!changes.dropdownEnabled?.newValue) {
+    } else if (changes[Settings.DropdownEnabled]) {
+      dropdownEnabled = changes[Settings.DropdownEnabled].newValue;
+      if (!changes[Settings.DropdownEnabled]?.newValue) {
         removeDropdown();
       }
+    }
+    if (changes[Settings.ExcludedWebsites]) {
+      setExcludedWebsites(changes[Settings.ExcludedWebsites].newValue);
     }
   }
 });
 
 
 function activate(): void {
-  document.addEventListener('keyup', onKeyUp);
-  document.addEventListener('scroll', onScroll);
-  window.addEventListener('resize', onResizeWindow);
+  deactivate(true);
+  const currentUrl = window.location.href;
+  const isExcluded = excludedWebSites.some((regExp) => !!currentUrl.match(regExp)?.length);
+  if (enabled && !isExcluded) {
+    document.addEventListener('keyup', onKeyUp);
+    document.addEventListener('scroll', onScroll);
+    window.addEventListener('resize', onResizeWindow);
+  }
 }
 
-function deactivate(): void {
+function deactivate(shouldNotRemoveDropdown: boolean = false): void {
   document.removeEventListener('keyup', onKeyUp);
   document.removeEventListener('scroll', onScroll);
   window.removeEventListener('resize', onResizeWindow);
-  removeDropdown();
+  if (!shouldNotRemoveDropdown) {
+    removeDropdown();
+  }
 }
 
+let enabled = false;
+
 let dropdownEnabled = false;
+
+let excludedWebSites: RegExp[] = [];
+
+function setExcludedWebsites(urls: string[]): void {
+  excludedWebSites = urls.map((url: string) => new RegExp(`^${url}$`, 'gm'));
+  activate();
+}
 
 
 /**
@@ -174,7 +193,6 @@ function replaceEmoji(toReplace: string, emoji: string): void {
  * @param response 
  */
 function partialEmojiResponseCallback(text: string, response: PartialEmojiResponse): void {
-  console.log('partial emoji response', response.emojis, target);
   emojis = response.emojis ?? {};
   rebuildDropdown();
 }

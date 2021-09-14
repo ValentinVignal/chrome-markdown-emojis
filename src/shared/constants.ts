@@ -1,4 +1,5 @@
 export enum Settings {
-	enabled = "enabled",
-	dropdownEnabled = 'dropdownEnabled',
+	Enabled = "enabled",
+	DropdownEnabled = 'dropdownEnabled',
+	ExcludedWebsites = 'excludedWebsites',
 }
