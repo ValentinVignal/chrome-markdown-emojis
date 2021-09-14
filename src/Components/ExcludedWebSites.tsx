@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import { isDebug } from "../globals";
 import { Settings } from "../shared/constants";
 import AddWebsite from "./AddWebsite";
-import ExcludedWebSite from "./ExcludedWebSite";
+import ExcludedWebsite from "./ExcludedWebsite";
 
-export default function ExcludedWebSites() {
+/**
+ *  All the excluded websites
+ * @returns 
+ */
+export default function ExcludedWebsites() {
 	const [list, setList] = useState<string[]>([]);
-
 
 	useEffect(() => {
 		if (!isDebug) {
@@ -22,14 +25,13 @@ export default function ExcludedWebSites() {
 				}
 			});
 		}
-
 	});
 
 	return <List dense={true}>
 		<Typography variant="h6">
 			Excluded websites
 		</Typography>
-		{list.map((url) => <ExcludedWebSite url={url} />)}
+		{list.map((url) => <ExcludedWebsite url={url} />)}
 		<AddWebsite />
 	</List>
 }

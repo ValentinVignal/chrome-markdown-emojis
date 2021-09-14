@@ -2,10 +2,13 @@ import { Divider, List, Typography } from '@material-ui/core';
 import './Body.scss';
 import DropdownSwitch from './DropdownSwitch';
 import EnabledSwitch from "./EnableSwitch";
-import ExcludedWebSites from './ExcludedWebSites';
+import ExcludedWebsites from './ExcludedWebsites';
 
+/**
+ *  Body of the popup
+ * @returns 
+ */
 export function Body() {
-
 	return (
 		<div>
 			<Typography variant="h5" id="title">
@@ -17,12 +20,11 @@ export function Body() {
 				<DropdownSwitch />
 			</List>
 			<Divider />
-			<ExcludedWebSites />
+			<ExcludedWebsites />
 			<Divider />
 			<Typography variant="h4" id="icon">
 				🙃
 			</Typography>
 		</div>
-
 	);
 }

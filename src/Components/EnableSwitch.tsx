@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import { isDebug } from "../globals";
 import { Settings } from "../shared/constants";
 
+/**
+ * Switch to disable/enable the extension
+ * @returns 
+ */
 export default function EnabledSwitch() {
 	const [enabled, setEnabled] = useState<boolean | null>(null);
 

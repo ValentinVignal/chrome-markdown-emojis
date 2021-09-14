@@ -6,9 +6,12 @@ import { isDebug } from "../globals";
 import { Settings } from "../shared/constants";
 
 
+/**
+ * Component to add a website
+ * @returns 
+ */
 export default function AddWebsite() {
 	const [text, setText] = useState<string>('');
-
 
 	function onTextChange(event: React.ChangeEvent<HTMLInputElement>): void {
 		setText(event.target.value);
@@ -27,10 +30,9 @@ export default function AddWebsite() {
 		}
 	}
 
-
 	return <ListItem>
 		<TextField
-			label="Website Regexp"
+			label="Website RegExp"
 			onChange={onTextChange}
 			value={text}
 		/>
@@ -41,7 +43,7 @@ export default function AddWebsite() {
 				disabled={!text}
 				onClick={onAdd}
 			>
-				<AddIcon />
+				<AddIcon fontSize="small" />
 			</IconButton>
 		</ListItemSecondaryAction>
 	</ListItem>;

@@ -7,7 +7,12 @@ interface IExcludeWebsiteProps {
 	url: string;
 }
 
-export default function ExcludedWebSite(props: IExcludeWebsiteProps) {
+/**
+ * One excluded website
+ * @param props 
+ * @returns 
+ */
+export default function ExcludedWebsite(props: IExcludeWebsiteProps) {
 
 	function onDelete(): void {
 		if (!isDebug) {
@@ -28,7 +33,7 @@ export default function ExcludedWebSite(props: IExcludeWebsiteProps) {
 				aria-label="delete"
 				onClick={onDelete}
 			>
-				<DeleteIcon />
+				<DeleteIcon fontSize="small" />
 			</IconButton>
 		</ListItemSecondaryAction>
 	</ListItem>;

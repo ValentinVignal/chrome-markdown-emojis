@@ -3,9 +3,12 @@ import { useEffect, useState } from "react";
 import { isDebug } from "../globals";
 import { Settings } from "../shared/constants";
 
+/**
+ * Switch to disabled/enable the drop down
+ * @returns 
+ */
 export default function DropdownSwitch() {
 	const [enabled, setEnabled] = useState<boolean | null>(null);
-
 
 	useEffect(() => {
 		if (!isDebug) {
@@ -15,7 +18,6 @@ export default function DropdownSwitch() {
 		}
 	});
 
-
 	return <ListItem>
 		<ListItemText
 			primary="Dropdown"
@@ -23,7 +25,6 @@ export default function DropdownSwitch() {
 		<ListItemSecondaryAction>
 			<Switch
 				checked={enabled ?? true}
-				name="switchDropdownEnabled"
 				onChange={(event) => {
 					if (enabled === null && !isDebug) {
 						// It was not loaded
