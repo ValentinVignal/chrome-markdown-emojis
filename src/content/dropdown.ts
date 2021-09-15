@@ -1,6 +1,6 @@
 
 import { Settings } from '../shared/constants';
-import { dropdownEmojiSpanClassName, dropDownHeight, dropdownId, dropdownKeySpanClassName, dropdownOptionClassName, dropdownPreselectedEmojiClassName, globals, padding } from './globals';
+import { dropdownEmojiSpanClassName, dropDownHeight, dropdownId, dropdownKeySpanClassName, dropdownOptionClassName, dropdownPreselectedEmojiId, globals, padding } from './globals';
 import { replaceEmoji } from './handleText';
 
 let resetPreselectedEmoji = true;
@@ -29,6 +29,7 @@ export function rebuildDropdown(): void {
 	}
 	globals.dropDown.setAttribute('style', style)
 	document.body.appendChild(globals.dropDown);
+	console.log('selectedIndex', globals.preSelectedEmoji);
 	for (const [index, key] of Object.keys(globals.emojis).entries()) {
 		const option = document.createElement('li');
 		// Span Emoji
@@ -43,9 +44,9 @@ export function rebuildDropdown(): void {
 		spanKey.className = dropdownKeySpanClassName;
 		option.appendChild(spanKey);
 
-		option.classList.add(dropdownOptionClassName);
+		option.className = dropdownOptionClassName;
 		if (index === globals.preSelectedEmoji) {
-			option.classList.add(dropdownPreselectedEmojiClassName);
+			option.setAttribute('id', dropdownPreselectedEmojiId);
 		}
 
 		const text = globals.text;
@@ -58,7 +59,9 @@ export function rebuildDropdown(): void {
 			});
 		}
 		globals.dropDown.appendChild(option);
+
 	}
+	document.getElementById(dropdownPreselectedEmojiId)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 /**
@@ -108,7 +111,7 @@ function onKeyDown(event: KeyboardEvent) {
 		)
 	) {
 		event.preventDefault();
-		const emojisNumber = Object.keys(globals).length ?? 0;
+		const emojisNumber = Object.keys(globals.emojis).length ?? 0;
 		if (event.key === 'ArrowDown' || (!event.shiftKey && event.key === 'Tab')) {
 			globals.preSelectedEmoji += 1;
 		} else {

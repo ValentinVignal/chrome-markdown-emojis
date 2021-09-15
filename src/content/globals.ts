@@ -26,7 +26,7 @@ export const globals = {
 export const dropdownId = 'chromeMarkdownEmojiDropdownId';
 export const dropdownOptionClassName = 'chromeMarkdownEmojiDropdownOptionClassName';
 export const dropdownEmojiSpanClassName = 'chromeMarkdownEmojiDropdownEmojiSpanClassName';
-export const dropdownPreselectedEmojiClassName = 'chromeMarkdownEmojiPreselectedEmojiClassName';
+export const dropdownPreselectedEmojiId = 'chromeMarkdownEmojiPreselectedEmojiId';
 export const dropdownKeySpanClassName = 'chromeMarkdownEmojiDropdownKeySpanClassName';
 
 export const fullEmojiRegExp = new RegExp(/( |^):([a-z0-9]|_|\+|-)*: $/gm);
