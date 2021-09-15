@@ -3,6 +3,7 @@ import './Body.scss';
 import DropdownSwitch from './DropdownSwitch';
 import EnabledSwitch from "./EnableSwitch";
 import ExcludedWebsites from './ExcludedWebsites';
+import TabToInsertSwitch from './TabToInsertSwitch';
 
 /**
  *  Body of the popup
@@ -18,6 +19,7 @@ export function Body() {
 			<List>
 				<EnabledSwitch />
 				<DropdownSwitch />
+				<TabToInsertSwitch />
 			</List>
 			<Divider />
 			<ExcludedWebsites />

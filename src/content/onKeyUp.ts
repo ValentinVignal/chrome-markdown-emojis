@@ -15,7 +15,7 @@ export function onKeyUp(event: KeyboardEvent): void {
 	if (event.key === 'Escape') {
 		return removeDropdown();
 	}
-	if (!event.key.match(/^([a-zA-Z0-9]|_|\+| |:|-){1}$/gm)?.length) {
+	if (!event.key.match(/^([a-zA-Z0-9]|_|\+| |:|-){1}$/gm)?.length && event.key !== 'Backspace') {
 		// It is not an accepted character, don't do anything
 		return;
 	}

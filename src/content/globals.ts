@@ -1,9 +1,11 @@
+import { Settings } from "../shared/constants";
 
 export const globals = {
 	settings: {
-		enabled: false,
-		dropdownEnabled: false,
-		excludedWebSites: [] as RegExp[],
+		[Settings.Enabled]: false,
+		[Settings.DropdownEnabled]: false,
+		[Settings.ExcludedWebsites]: [] as RegExp[],
+		[Settings.TabToInsert]: false,
 	},
 	/**
 	 * The target of the last key event
@@ -24,6 +26,7 @@ export const globals = {
 export const dropdownId = 'chromeMarkdownEmojiDropdownId';
 export const dropdownOptionClassName = 'chromeMarkdownEmojiDropdownOptionClassName';
 export const dropdownEmojiSpanClassName = 'chromeMarkdownEmojiDropdownEmojiSpanClassName';
+export const dropdownPreselectedEmojiClassName = 'chromeMarkdownEmojiPreselectedEmojiClassName';
 export const dropdownKeySpanClassName = 'chromeMarkdownEmojiDropdownKeySpanClassName';
 
 export const fullEmojiRegExp = new RegExp(/( |^):([a-z0-9]|_|\+|-)*: $/gm);

@@ -8,12 +8,12 @@ import { Settings } from "../shared/constants";
  * @returns 
  */
 export default function EnabledSwitch() {
-	const [enabled, setEnabled] = useState<boolean | null>(null);
+	const [enabled, setEnabled] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (!isDebug) {
 			chrome.storage.sync.get(Settings.Enabled, (data) => {
-				setEnabled(data[Settings.Enabled]);
+				setEnabled(!!data[Settings.Enabled]);
 			});
 		}
 	});

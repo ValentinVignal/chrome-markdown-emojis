@@ -1,5 +1,6 @@
 
-import { dropdownEmojiSpanClassName, dropDownHeight, dropdownId, dropdownKeySpanClassName, dropdownOptionClassName, globals, padding } from './globals';
+import { Settings } from '../shared/constants';
+import { dropdownEmojiSpanClassName, dropDownHeight, dropdownId, dropdownKeySpanClassName, dropdownOptionClassName, dropdownPreselectedEmojiClassName, globals, padding } from './globals';
 import { replaceEmoji } from './handleText';
 
 let resetPreselectedEmoji = true;
@@ -15,7 +16,7 @@ export function rebuildDropdown(): void {
 	if (globals.dropDown) {
 		removeDropdown();
 	}
-	globals.target.addEventListener('focusout', onFocusOut);
+	// globals.target.addEventListener('focusout', onFocusOut);
 	globals.target.addEventListener('keydown', onKeyDown);
 	globals.dropDown = document.createElement('ul');
 	globals.dropDown.setAttribute('id', dropdownId);
@@ -34,18 +35,19 @@ export function rebuildDropdown(): void {
 		const spanEmoji = document.createElement('span');
 		const emoji = globals.emojis[key];
 		spanEmoji.innerText = emoji;
-		spanEmoji.className = dropdownEmojiSpanClassName;
+		spanEmoji.classList.add(dropdownEmojiSpanClassName);
 		option.appendChild(spanEmoji);
 		// Span key
 		const spanKey = document.createElement('span');
 		spanKey.innerText = key;
-		if (index === globals.preSelectedEmoji) {
-			spanKey.innerText += ' ------';
-		}
 		spanKey.className = dropdownKeySpanClassName;
 		option.appendChild(spanKey);
 
-		option.className = dropdownOptionClassName;
+		option.classList.add(dropdownOptionClassName);
+		if (index === globals.preSelectedEmoji) {
+			option.classList.add(dropdownPreselectedEmojiClassName);
+		}
+
 		const text = globals.text;
 		const target = globals.target;
 		option.onclick = () => {
@@ -54,11 +56,6 @@ export function rebuildDropdown(): void {
 				text,
 				emoji
 			});
-
-			// const splits = _text.split(':');
-			// _target?.focus(); // For Facebook, we need to focus before modifying the text and dispatching the event
-			// replaceEmoji(`:${splits[splits.length - 1]}`, `${emoji} `);
-			// removeDropdown();
 		}
 		globals.dropDown.appendChild(option);
 	}
@@ -102,12 +99,17 @@ function findDropdownTopBottom(): DropdownPosition {
 
 
 function onKeyDown(event: KeyboardEvent) {
-
-	console.log('key', event);
-	if (event.key === 'Tab' && globals.emojis) {
+	if (
+		!!globals.emojis && (
+			['ArrowUp', 'ArrowDown'].includes(event.key) ||
+			(!globals.settings[Settings.TabToInsert]
+				&& event.key === 'Tab'
+			)
+		)
+	) {
 		event.preventDefault();
 		const emojisNumber = Object.keys(globals).length ?? 0;
-		if (!event.shiftKey) {
+		if (event.key === 'ArrowDown' || (!event.shiftKey && event.key === 'Tab')) {
 			globals.preSelectedEmoji += 1;
 		} else {
 			globals.preSelectedEmoji -= 1;
@@ -118,7 +120,11 @@ function onKeyDown(event: KeyboardEvent) {
 		globals.preSelectedEmoji %= emojisNumber;
 		resetPreselectedEmoji = false;
 		rebuildDropdown();
-	} else if (event.key === 'Enter') {
+	} else if (
+		event.key === 'Enter' ||
+		(event.key === ' ' && event.shiftKey) ||
+		(globals.settings[Settings.TabToInsert] && event.key === 'Tab')
+	) {
 		event.preventDefault();
 		onClick({
 			target: globals.target!,

@@ -4,34 +4,36 @@ import { isDebug } from "../globals";
 import { Settings } from "../shared/constants";
 
 /**
- * Switch to disabled/enable the drop down
+ * Switch to disable/enable the extension
  * @returns 
  */
-export default function DropdownSwitch() {
+export default function TabToInsertSwitch() {
 	const [enabled, setEnabled] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (!isDebug) {
-			chrome.storage.sync.get(Settings.DropdownEnabled, (data) => {
-				setEnabled(!!data[Settings.DropdownEnabled]);
+			chrome.storage.sync.get(Settings.TabToInsert, (data) => {
+				setEnabled(!!data[Settings.TabToInsert]);
 			});
 		}
 	});
 
 	return <ListItem>
 		<ListItemText
-			primary="Dropdown"
+			primary="Tab to insert"
+			secondary="Press Tab to insert an emoji"
 		/>
 		<ListItemSecondaryAction>
 			<Switch
 				checked={enabled ?? true}
+				name="switchEnabled"
 				onChange={(event) => {
 					if (enabled === null && !isDebug) {
 						// It was not loaded
 						return;
 					}
 					if (!isDebug) {
-						chrome.storage.sync.set({ [Settings.DropdownEnabled]: event.target.checked });
+						chrome.storage.sync.set({ [Settings.TabToInsert]: event.target.checked });
 					}
 					setEnabled(event.target.checked);
 				}}

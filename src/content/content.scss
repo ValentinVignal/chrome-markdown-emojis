@@ -14,12 +14,16 @@
 	list-style-type: none;
 }
 
+@mixin selected {
+	background-color: rgb(31, 111, 235);
+	color: white;
+}
+
 .chromeMarkdownEmojiDropdownOptionClassName {
 	padding: 2px 8px 2px 8px;
 	cursor: pointer;
 	&:hover {
-		background-color: rgb(31, 111, 235);
-		color: white;
+		@include selected;
 	}
 	border-bottom: 0.5px solid black;
 }
@@ -33,4 +37,8 @@
 .chromeMarkdownEmojiDropdownKeySpanClassName {
 	font-size: medium;
 	vertical-align: middle;
+}
+
+.chromeMarkdownEmojiPreselectedEmojiClassName {
+	@include selected;
 }
