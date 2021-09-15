@@ -37,7 +37,7 @@ function onMessage(request: Message, sender: any, sendResponse: (response: any) 
 			key = request.text;
 			sendResponse({
 				key,
-				emojis: Object.fromEntries(Object.entries(emojisMap).filter(([fullKey, value]) => fullKey.startsWith(key))),
+				emojis: Object.fromEntries(Object.entries(emojisMap).filter(([fullKey]) => fullKey.startsWith(key)).sort(([keyA], [keyB]) => keyA.localeCompare(keyB))),
 			} as PartialEmojiResponse)
 			break;
 	}
