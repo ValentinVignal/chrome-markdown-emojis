@@ -19,7 +19,6 @@ export function onKeyUp(event: KeyboardEvent): void {
 		// It is not an accepted character, don't do anything
 		return;
 	}
-	globals.preSelectedEmoji = 0;
 
 	const _target = event.target;
 

@@ -20,7 +20,6 @@ export const globals = {
 	 */
 	dropDown: null as HTMLElement | null,
 	emojis: {} as { [key: string]: string },
-	preSelectedEmoji: 0,
 };
 
 export const dropdownId = 'chromeMarkdownEmojiDropdownId';

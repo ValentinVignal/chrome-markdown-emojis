@@ -3,7 +3,6 @@ import { Settings } from '../shared/constants';
 import { dropdownEmojiSpanClassName, dropDownHeight, dropdownId, dropdownKeySpanClassName, dropdownOptionClassName, dropdownPreselectedEmojiId, globals, padding } from './globals';
 import { replaceEmoji } from './handleText';
 
-let resetPreselectedEmoji = true;
 
 /**
  * Rebuild the dropdown
@@ -29,7 +28,6 @@ export function rebuildDropdown(): void {
 	}
 	globals.dropDown.setAttribute('style', style)
 	document.body.appendChild(globals.dropDown);
-	console.log('selectedIndex', globals.preSelectedEmoji);
 	for (const [index, key] of Object.keys(globals.emojis).entries()) {
 		const option = document.createElement('li');
 		// Span Emoji
@@ -45,7 +43,7 @@ export function rebuildDropdown(): void {
 		option.appendChild(spanKey);
 
 		option.className = dropdownOptionClassName;
-		if (index === globals.preSelectedEmoji) {
+		if (index === 0) {
 			option.setAttribute('id', dropdownPreselectedEmojiId);
 		}
 
@@ -61,7 +59,6 @@ export function rebuildDropdown(): void {
 		globals.dropDown.appendChild(option);
 
 	}
-	document.getElementById(dropdownPreselectedEmojiId)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 /**
@@ -77,10 +74,6 @@ export function removeDropdown(): void {
 		// Remove it
 		globals.dropDown.remove();
 		globals.dropDown = null;
-		if (resetPreselectedEmoji) {
-			globals.preSelectedEmoji = 0;
-		}
-		resetPreselectedEmoji = true;
 	}
 }
 
@@ -102,6 +95,7 @@ function findDropdownTopBottom(): DropdownPosition {
 
 
 function onKeyDown(event: KeyboardEvent) {
+	const currentSelected = document.getElementById(dropdownPreselectedEmojiId);
 	if (
 		!!globals.emojis && (
 			['ArrowUp', 'ArrowDown'].includes(event.key) ||
@@ -110,19 +104,22 @@ function onKeyDown(event: KeyboardEvent) {
 			)
 		)
 	) {
+		currentSelected?.removeAttribute('id');
 		event.preventDefault();
-		const emojisNumber = Object.keys(globals.emojis).length ?? 0;
+		let newSelected: Element | null | undefined;
 		if (event.key === 'ArrowDown' || (!event.shiftKey && event.key === 'Tab')) {
-			globals.preSelectedEmoji += 1;
+			newSelected = currentSelected?.nextElementSibling;
+			if (!newSelected) {
+				newSelected = currentSelected?.parentElement?.firstElementChild;
+			}
 		} else {
-			globals.preSelectedEmoji -= 1;
-			if (globals.preSelectedEmoji < 0) {
-				globals.preSelectedEmoji = Math.max(emojisNumber - 1, 0);
+			newSelected = currentSelected?.previousElementSibling;
+			if (!newSelected) {
+				newSelected = currentSelected?.parentElement?.lastElementChild;
 			}
 		}
-		globals.preSelectedEmoji %= emojisNumber;
-		resetPreselectedEmoji = false;
-		rebuildDropdown();
+		newSelected?.setAttribute('id', dropdownPreselectedEmojiId);
+		newSelected?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 	} else if (
 		event.key === 'Enter' ||
 		(event.key === ' ' && event.shiftKey) ||
@@ -132,7 +129,7 @@ function onKeyDown(event: KeyboardEvent) {
 		onClick({
 			target: globals.target!,
 			text: globals.text,
-			emoji: Object.values(globals.emojis)[globals.preSelectedEmoji]
+			emoji: currentSelected?.firstElementChild?.textContent as string,
 		});
 	}
 }
