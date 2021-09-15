@@ -17,8 +17,9 @@ export function onKeyUp(event: KeyboardEvent): void {
 	}
 	if (!event.key.match(/^([a-zA-Z0-9]|_|\+| |:|-){1}$/gm)?.length) {
 		// It is not an accepted character, don't do anything
+		return;
 	}
-
+	globals.preSelectedEmoji = 0;
 
 	const _target = event.target;
 
@@ -44,6 +45,7 @@ export function onKeyUp(event: KeyboardEvent): void {
 				type: MessageTypes.ParseFullEmoji,
 				text: fullEmojiMatch[0].split(':')[1],
 			}, (response) => {
+				if (!response) return;
 				try {
 					parseFullEmojiResponseCallback(response);
 				} catch (error) {

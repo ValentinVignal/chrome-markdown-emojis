@@ -2,6 +2,8 @@
 import { dropdownEmojiSpanClassName, dropDownHeight, dropdownId, dropdownKeySpanClassName, dropdownOptionClassName, globals, padding } from './globals';
 import { replaceEmoji } from './handleText';
 
+let resetPreselectedEmoji = true;
+
 /**
  * Rebuild the dropdown
  * @returns 
@@ -13,6 +15,8 @@ export function rebuildDropdown(): void {
 	if (globals.dropDown) {
 		removeDropdown();
 	}
+	globals.target.addEventListener('focusout', onFocusOut);
+	globals.target.addEventListener('keydown', onKeyDown);
 	globals.dropDown = document.createElement('ul');
 	globals.dropDown.setAttribute('id', dropdownId);
 	const xY = findDropdownTopBottom();
@@ -24,7 +28,7 @@ export function rebuildDropdown(): void {
 	}
 	globals.dropDown.setAttribute('style', style)
 	document.body.appendChild(globals.dropDown);
-	for (let key in globals.emojis) {
+	for (const [index, key] of Object.keys(globals.emojis).entries()) {
 		const option = document.createElement('li');
 		// Span Emoji
 		const spanEmoji = document.createElement('span');
@@ -35,17 +39,26 @@ export function rebuildDropdown(): void {
 		// Span key
 		const spanKey = document.createElement('span');
 		spanKey.innerText = key;
+		if (index === globals.preSelectedEmoji) {
+			spanKey.innerText += ' ------';
+		}
 		spanKey.className = dropdownKeySpanClassName;
 		option.appendChild(spanKey);
 
 		option.className = dropdownOptionClassName;
-		const _text = globals.text;
-		const _target = globals.target;
+		const text = globals.text;
+		const target = globals.target;
 		option.onclick = () => {
-			const splits = _text.split(':');
-			_target?.focus(); // For Facebook, we need to focus before modifying the text and dispatching the event
-			replaceEmoji(`:${splits[splits.length - 1]}`, `${emoji} `);
-			removeDropdown();
+			onClick({
+				target,
+				text,
+				emoji
+			});
+
+			// const splits = _text.split(':');
+			// _target?.focus(); // For Facebook, we need to focus before modifying the text and dispatching the event
+			// replaceEmoji(`:${splits[splits.length - 1]}`, `${emoji} `);
+			// removeDropdown();
 		}
 		globals.dropDown.appendChild(option);
 	}
@@ -55,11 +68,19 @@ export function rebuildDropdown(): void {
  * Remove the dropdown
  */
 export function removeDropdown(): void {
+	if (globals.target) {
+		globals.target.removeEventListener('focusout', onFocusOut);
+		globals.target.removeEventListener('keydown', onKeyDown);
+
+	}
 	if (!!globals.dropDown) {
 		// Remove it
 		globals.dropDown.remove();
 		globals.dropDown = null;
-
+		if (resetPreselectedEmoji) {
+			globals.preSelectedEmoji = 0;
+		}
+		resetPreselectedEmoji = true;
 	}
 }
 
@@ -80,3 +101,40 @@ function findDropdownTopBottom(): DropdownPosition {
 }
 
 
+function onKeyDown(event: KeyboardEvent) {
+
+	console.log('key', event);
+	if (event.key === 'Tab' && globals.emojis) {
+		event.preventDefault();
+		const emojisNumber = Object.keys(globals).length ?? 0;
+		if (!event.shiftKey) {
+			globals.preSelectedEmoji += 1;
+		} else {
+			globals.preSelectedEmoji -= 1;
+			if (globals.preSelectedEmoji < 0) {
+				globals.preSelectedEmoji = Math.max(emojisNumber - 1, 0);
+			}
+		}
+		globals.preSelectedEmoji %= emojisNumber;
+		resetPreselectedEmoji = false;
+		rebuildDropdown();
+	} else if (event.key === 'Enter') {
+		event.preventDefault();
+		onClick({
+			target: globals.target!,
+			text: globals.text,
+			emoji: Object.values(globals.emojis)[globals.preSelectedEmoji]
+		});
+	}
+}
+
+function onClick(input: { target: HTMLElement, text: string, emoji: string }): void {
+	const splits = input.text.split(':');
+	input.target.focus(); // For Facebook, we need to focus before modifying the text and dispatching the event
+	replaceEmoji(`:${splits[splits.length - 1]}`, `${input.emoji} `);
+	removeDropdown();
+}
+
+function onFocusOut(): void {
+	window.setTimeout(removeDropdown, 100);
+}
