@@ -43,9 +43,9 @@ export function rebuildDropdown(): void {
 		const _target = globals.target;
 		option.onclick = () => {
 			const splits = _text.split(':');
+			_target?.focus(); // For Facebook, we need to focus before modifying the text and dispatching the event
 			replaceEmoji(`:${splits[splits.length - 1]}`, `${emoji} `);
 			removeDropdown();
-			_target?.focus();
 		}
 		globals.dropDown.appendChild(option);
 	}
