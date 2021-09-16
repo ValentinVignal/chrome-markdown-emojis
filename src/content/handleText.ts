@@ -84,12 +84,28 @@ function setFacebookText(newText: string): void {
  * @param emoji 
  * @returns 
  */
-export function replaceEmoji(toReplace: string, emoji: string): void {
-	const splits = globals.text.split(toReplace);
-	if (!(splits.length >= 2)) return;
-	const newValue = [...splits.slice(0, splits.length - 2), splits.slice(splits.length - 2).join(emoji)].join(toReplace);
-	setText(newValue);
+export function replaceEmoji(toReplace: string, emoji: string, cursorPosition?: number | null): void {
+	console.log('replaceEmoji', toReplace, emoji, globals.text, globals.cursorPosition);
+	const slicedText = globals.text.slice(0, globals.cursorPosition!);
+	const newValue = [
+		slicedText.slice(0, slicedText.length - toReplace.length),
+		emoji,
+		globals.text.slice(globals.cursorPosition!),
+	].join('');
 
+	// const newValue = slicedText.slice()
+	// const splits = globals.text.split(toReplace);
+	// if (!(splits.length >= 2)) return;
+	// const newValue = [...splits.slice(0, splits.length - 2), splits.slice(splits.length - 2).join(emoji)].join(toReplace);
+	setText(newValue);
+	// TODO Set cursor position again
 }
 
+export function getCursorPosition(): void {
+	if (globals.target instanceof HTMLInputElement) {
+		globals.cursorPosition = globals.target.selectionStart ?? globals.cursorPosition;
+	} else {
+		globals.cursorPosition = window.getSelection()?.focusOffset ?? globals.cursorPosition;
+	}
+}
 

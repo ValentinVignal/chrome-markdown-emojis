@@ -28,6 +28,9 @@ export function rebuildDropdown(): void {
 	}
 	globals.dropDown.setAttribute('style', style)
 	document.body.appendChild(globals.dropDown);
+	const text = globals.text;
+	const target = globals.target;
+	const cursorPosition = globals.cursorPosition!;
 	for (const [index, key] of Object.keys(globals.emojis).entries()) {
 		const option = document.createElement('li');
 		// Span Emoji
@@ -47,13 +50,12 @@ export function rebuildDropdown(): void {
 			option.setAttribute('id', dropdownPreselectedEmojiId);
 		}
 
-		const text = globals.text;
-		const target = globals.target;
 		option.onclick = () => {
 			onClick({
 				target,
 				text,
-				emoji
+				emoji,
+				cursorPosition,
 			});
 		}
 		globals.dropDown.appendChild(option);
@@ -130,14 +132,17 @@ function onKeyDown(event: KeyboardEvent) {
 			target: globals.target!,
 			text: globals.text,
 			emoji: currentSelected?.firstElementChild?.textContent as string,
+			cursorPosition: globals.cursorPosition!,
 		});
 	}
 }
 
-function onClick(input: { target: HTMLElement, text: string, emoji: string }): void {
-	const splits = input.text.split(':');
+function onClick(input: { target: HTMLElement, text: string, emoji: string, cursorPosition: number }): void {
+	const slicedText = input.text.slice(0, input.cursorPosition);
+	const splits = slicedText.split(':');
+	const partialKey = splits[splits.length - 1];
 	input.target.focus(); // For Facebook, we need to focus before modifying the text and dispatching the event
-	replaceEmoji(`:${splits[splits.length - 1]}`, `${input.emoji} `);
+	replaceEmoji(`:${partialKey}`, `${input.emoji} `, input.cursorPosition);
 	removeDropdown();
 }
 

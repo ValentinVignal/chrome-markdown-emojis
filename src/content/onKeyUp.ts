@@ -1,7 +1,7 @@
 import { Message, MessageTypes, ParseFullEmojiResponse, PartialEmojiResponse } from "../types";
 import { removeDropdown } from "./dropdown";
 import { fullEmojiRegExp, globals, partialEmojiRegExp } from "./globals";
-import { getText } from "./handleText";
+import { getCursorPosition, getText } from "./handleText";
 import { parseFullEmojiResponseCallback, partialEmojiResponseCallback } from "./responseCallbacks";
 
 /**
@@ -20,6 +20,7 @@ export function onKeyUp(event: KeyboardEvent): void {
 		return;
 	}
 
+
 	const _target = event.target;
 
 	if (!_target || !(_target instanceof HTMLElement)) {
@@ -28,8 +29,10 @@ export function onKeyUp(event: KeyboardEvent): void {
 	}
 	globals.target = _target;
 	globals.text = getText(globals.target);	// The text to work on
-	const fullEmojiMatch = globals.text.match(fullEmojiRegExp);
-	const partialEmojiMatch = globals.text.match(partialEmojiRegExp);
+	getCursorPosition();
+	const slicedText = globals.text.slice(0, globals.cursorPosition!);
+	const fullEmojiMatch = slicedText.match(fullEmojiRegExp);
+	const partialEmojiMatch = slicedText.match(partialEmojiRegExp);
 	const couldBeFullEmoji = !!fullEmojiMatch?.length;
 	const couldBePartialEmoji = !!partialEmojiMatch?.length;
 
@@ -68,4 +71,5 @@ export function onKeyUp(event: KeyboardEvent): void {
 		console.log('Error listening to keyup', error);
 	}
 }
+
 

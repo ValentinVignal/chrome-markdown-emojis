@@ -15,6 +15,7 @@ export const globals = {
 	 * The text
 	 */
 	text: '',
+	cursorPosition: null as number | null,
 	/**
 	 * The drop down
 	 */

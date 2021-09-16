@@ -11,7 +11,7 @@ import { replaceEmoji } from "./handleText";
  */
 export function parseFullEmojiResponseCallback(response: ParseFullEmojiResponse): void {
 	if (response?.key && response.emoji && response.key !== response.emoji) {
-		replaceEmoji(`:${response.key}:`, response.emoji);
+		replaceEmoji(`:${response.key}: `, `${response.emoji} `);
 	}
 }
 
