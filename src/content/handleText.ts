@@ -85,20 +85,21 @@ function setFacebookText(newText: string): void {
  * @returns 
  */
 export function replaceEmoji(toReplace: string, emoji: string, cursorPosition?: number | null): void {
-	console.log('replaceEmoji', toReplace, emoji, globals.text, globals.cursorPosition);
+	cursorPosition ??= globals.cursorPosition;
 	const slicedText = globals.text.slice(0, globals.cursorPosition!);
-	const newValue = [
+	const newSlicedText = [
 		slicedText.slice(0, slicedText.length - toReplace.length),
 		emoji,
+	].join('');
+	const newValue = [
+		newSlicedText,
 		globals.text.slice(globals.cursorPosition!),
 	].join('');
-
-	// const newValue = slicedText.slice()
-	// const splits = globals.text.split(toReplace);
-	// if (!(splits.length >= 2)) return;
-	// const newValue = [...splits.slice(0, splits.length - 2), splits.slice(splits.length - 2).join(emoji)].join(toReplace);
 	setText(newValue);
-	// TODO Set cursor position again
+	if (globals.target instanceof HTMLInputElement) {
+		const newCursorPosition = newSlicedText.length;
+		globals.target.setSelectionRange(newCursorPosition, newCursorPosition);
+	}
 }
 
 export function getCursorPosition(): void {
