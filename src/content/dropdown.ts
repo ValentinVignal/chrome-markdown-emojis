@@ -15,7 +15,7 @@ export function rebuildDropdown(): void {
 	if (globals.dropDown) {
 		removeDropdown();
 	}
-	// globals.target.addEventListener('focusout', onFocusOut);
+	globals.target.addEventListener('focusout', onFocusOut);
 	globals.target.addEventListener('keydown', onKeyDown);
 	globals.dropDown = document.createElement('ul');
 	globals.dropDown.setAttribute('id', dropdownId);
