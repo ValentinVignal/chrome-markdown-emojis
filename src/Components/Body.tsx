@@ -3,6 +3,7 @@ import './Body.scss';
 import DropdownSwitch from './DropdownSwitch';
 import EnabledSwitch from "./EnableSwitch";
 import ExcludedWebsites from './ExcludedWebsites';
+import InclusiveSearchSwitch from './InclusiveSearchSwitch';
 import TabToInsertSwitch from './TabToInsertSwitch';
 
 /**
@@ -20,6 +21,7 @@ export function Body() {
 				<EnabledSwitch />
 				<DropdownSwitch />
 				<TabToInsertSwitch />
+				<InclusiveSearchSwitch />
 			</List>
 			<Divider />
 			<ExcludedWebsites />

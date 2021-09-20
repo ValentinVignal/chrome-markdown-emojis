@@ -15,10 +15,6 @@ export function onKeyUp(event: KeyboardEvent): void {
 	if (event.key === 'Escape') {
 		return removeDropdown();
 	}
-	if (!event.key.match(/^([a-zA-Z0-9]|_|\+| |:|-){1}$/gm)?.length && event.key !== 'Backspace') {
-		// It is not an accepted character, don't do anything
-		return;
-	}
 
 
 	const _target = event.target;
@@ -28,7 +24,12 @@ export function onKeyUp(event: KeyboardEvent): void {
 		return;
 	}
 	globals.target = _target;
-	globals.text = getText(globals.target);	// The text to work on
+	const newText = getText(globals.target);	// The text to work on
+	if (newText === globals.text) {
+		// No change
+		return;
+	}
+	globals.text = newText;
 	getCursorPosition();
 	const slicedText = globals.text.slice(0, globals.cursorPosition!);
 	const fullEmojiMatch = slicedText.match(fullEmojiRegExp);

@@ -3,4 +3,5 @@ export enum Settings {
 	DropdownEnabled = 'dropdownEnabled',
 	ExcludedWebsites = 'excludedWebsites',
 	TabToInsert = 'tabToInsert',
+	InclusiveSearch = 'inclusiveSearch'
 }

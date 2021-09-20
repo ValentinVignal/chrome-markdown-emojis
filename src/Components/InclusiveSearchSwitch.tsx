@@ -4,35 +4,34 @@ import { isDebug } from "../globals";
 import { Settings } from "../shared/constants";
 
 /**
- * Switch to disable/enable the extension
+ * Switch to disabled/enable the inclusive search
  * @returns 
  */
-export default function EnabledSwitch() {
+export default function InclusiveSearchSwitch() {
 	const [enabled, setEnabled] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (!isDebug) {
-			chrome.storage.sync.get(Settings.Enabled, (data) => {
-				setEnabled(data[Settings.Enabled] ?? false);
+			chrome.storage.sync.get(Settings.InclusiveSearch, (data) => {
+				setEnabled(!!data[Settings.InclusiveSearch]);
 			});
 		}
 	});
 
 	return <ListItem>
 		<ListItemText
-			primary="Enabled"
+			primary="Inclusive search"
 		/>
 		<ListItemSecondaryAction>
 			<Switch
-				checked={enabled ?? true}
-				name="switchEnabled"
+				checked={enabled}
 				onChange={(event) => {
 					if (enabled === null && !isDebug) {
 						// It was not loaded
 						return;
 					}
 					if (!isDebug) {
-						chrome.storage.sync.set({ [Settings.Enabled]: event.target.checked });
+						chrome.storage.sync.set({ [Settings.InclusiveSearch]: event.target.checked });
 					}
 					setEnabled(event.target.checked);
 				}}

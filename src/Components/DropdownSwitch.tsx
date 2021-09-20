@@ -8,12 +8,12 @@ import { Settings } from "../shared/constants";
  * @returns 
  */
 export default function DropdownSwitch() {
-	const [enabled, setEnabled] = useState<boolean>(false);
+	const [enabled, setEnabled] = useState<boolean>(true);
 
 	useEffect(() => {
 		if (!isDebug) {
 			chrome.storage.sync.get(Settings.DropdownEnabled, (data) => {
-				setEnabled(!!data[Settings.DropdownEnabled]);
+				setEnabled(data[Settings.DropdownEnabled] ?? true);
 			});
 		}
 	});
@@ -24,7 +24,7 @@ export default function DropdownSwitch() {
 		/>
 		<ListItemSecondaryAction>
 			<Switch
-				checked={enabled ?? true}
+				checked={enabled}
 				onChange={(event) => {
 					if (enabled === null && !isDebug) {
 						// It was not loaded
