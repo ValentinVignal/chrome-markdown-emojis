@@ -1,6 +1,6 @@
-import { ListItem, ListItemSecondaryAction, ListItemText, Switch } from "@material-ui/core";
+import { ListItem, ListItemSecondaryAction, ListItemText, Switch, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { isDebug } from "../globals";
+import { isDebug, isOptions } from "../globals";
 import { Settings } from "../shared/constants";
 
 /**
@@ -19,9 +19,21 @@ export default function InclusiveSearchSwitch() {
 	});
 
 	return <ListItem>
-		<ListItemText
-			primary="Inclusive search"
-		/>
+		<div>
+
+			<ListItemText
+				primary="Inclusive search"
+			/>
+			{isOptions ?
+				<Typography paragraph={true} color="textSecondary">
+					If disabled, only the emojis starting strictly by the entered text will be displayed in the dropdown.<br />
+					Ex: 🎉 (:tada:) will be shown if ':ta' is entered but not if ':td' is entered.<br />
+					<br />
+					If enabled, all the emojis containing the entered letters in the correct order will be shown.<br />
+					Ex: 🎉 (:tada:) will be shown if ':ta' or ':td' is entered, but not if ':dt' is entered.
+				</Typography> : null
+			}
+		</div>
 		<ListItemSecondaryAction>
 			<Switch
 				checked={enabled}

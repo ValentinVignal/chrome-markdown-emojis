@@ -31,5 +31,6 @@
   ],
   "background": {
     "service_worker": "./static/js/background.js"
-  }
+  },
+  "options_page": "index.html#options"
 }

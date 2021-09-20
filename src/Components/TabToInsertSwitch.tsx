@@ -1,6 +1,6 @@
-import { ListItem, ListItemSecondaryAction, ListItemText, Switch } from "@material-ui/core";
+import { ListItem, ListItemSecondaryAction, ListItemText, Switch, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { isDebug } from "../globals";
+import { isDebug, isOptions } from "../globals";
 import { Settings } from "../shared/constants";
 
 /**
@@ -19,10 +19,19 @@ export default function TabToInsertSwitch() {
 	});
 
 	return <ListItem>
-		<ListItemText
-			primary="Tab to insert"
-			secondary="Press Tab to insert an emoji"
-		/>
+		<div>
+
+			<ListItemText
+				primary="Tab to insert"
+				secondary={isOptions ? null : "Press Tab to insert an emoji"}
+			/>
+			{isOptions ?
+				<Typography paragraph={true} color="textSecondary">
+					It enabled, press on {"<Tab>"} will insert the emoji in the input text.<br />
+					If not, press on {"<Tab>"} will change the preselected emojis in the dropdown.
+				</Typography> : null
+			}
+		</div>
 		<ListItemSecondaryAction>
 			<Switch
 				checked={enabled ?? true}

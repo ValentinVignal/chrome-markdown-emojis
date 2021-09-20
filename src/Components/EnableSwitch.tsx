@@ -19,9 +19,11 @@ export default function EnabledSwitch() {
 	});
 
 	return <ListItem>
+
 		<ListItemText
 			primary="Enabled"
 		/>
+
 		<ListItemSecondaryAction>
 			<Switch
 				checked={enabled ?? true}

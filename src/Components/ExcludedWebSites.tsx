@@ -1,6 +1,6 @@
 import { List, Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { isDebug } from "../globals";
+import { isDebug, isOptions } from "../globals";
 import { Settings } from "../shared/constants";
 import AddWebsite from "./AddWebsite";
 import ExcludedWebsite from "./ExcludedWebsite";
@@ -31,6 +31,12 @@ export default function ExcludedWebsites() {
 		<Typography variant="h6">
 			Excluded websites
 		</Typography>
+		{isOptions ?
+			<Typography paragraph={true} color="textSecondary">
+				All the ignored web sites by the extension.<br />
+				To disabled the extension on a specific web site or a set of websites, add a <a href="https://regexr.com/">RegExp</a> of their URL(s).
+			</Typography>
+			: null}
 		{list.map((url) => <ExcludedWebsite url={url} />)}
 		<AddWebsite />
 	</List>

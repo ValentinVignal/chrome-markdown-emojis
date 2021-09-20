@@ -1,4 +1,5 @@
 import { Divider, List, Typography } from '@material-ui/core';
+import { isOptions } from '../globals';
 import './Body.scss';
 import DropdownSwitch from './DropdownSwitch';
 import EnabledSwitch from "./EnableSwitch";
@@ -12,7 +13,7 @@ import TabToInsertSwitch from './TabToInsertSwitch';
  */
 export function Body() {
 	return (
-		<div>
+		<div id="body" style={{ width: isOptions ? "600px" : undefined }}>
 			<Typography variant="h5" id="title">
 				Chrome Markdown emojis
 			</Typography>
