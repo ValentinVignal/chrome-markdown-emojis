@@ -1,0 +1,21 @@
+name: Tests
+
+on: [pull_request, push]
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
+      - run: npm i
+      - run: npm run test:coverage
+        name: Run test with coverage
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./coverage/cobertura-coverage.xml
