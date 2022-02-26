@@ -1,6 +1,12 @@
 name: Tests
 
-on: [pull_request, push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   tests:
@@ -11,7 +17,7 @@ jobs:
       - name: Use Node.js 16
         uses: actions/setup-node@v2
         with:
-          node-version: 12
+          node-version: 16
       - run: npm i
       - run: npm run test:coverage
         name: Run test with coverage
