@@ -1,26 +1,26 @@
 import { Settings } from "../shared/constants";
 
 export const globals = {
-	settings: {
-		[Settings.Enabled]: false,
-		[Settings.DropdownEnabled]: false,
-		[Settings.ExcludedWebsites]: [] as RegExp[],
-		[Settings.TabToInsert]: false,
-	},
-	/**
-	 * The target of the last key event
-	 */
-	target: null as HTMLElement | null,
-	/**
-	 * The text
-	 */
-	text: '',
-	cursorPosition: null as number | null,
-	/**
-	 * The drop down
-	 */
-	dropDown: null as HTMLElement | null,
-	emojis: {} as { [key: string]: string },
+  settings: {
+    [Settings.Enabled]: false,
+    [Settings.DropdownEnabled]: false,
+    [Settings.ExcludedWebsites]: [] as RegExp[],
+    [Settings.TabToInsert]: false,
+  },
+  /**
+   * The target of the last key event
+   */
+  target: null as HTMLElement | null,
+  /**
+   * The text
+   */
+  text: '',
+  cursorPosition: null as number | null,
+  /**
+   * The drop down
+   */
+  dropDown: null as HTMLElement | null,
+  emojis: {} as { [key: string]: string },
 };
 
 export const dropdownId = 'chromeMarkdownEmojiDropdownId';

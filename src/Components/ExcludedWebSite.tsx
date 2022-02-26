@@ -4,7 +4,7 @@ import { isDebug } from "../globals";
 import { Settings } from "../shared/constants";
 
 interface IExcludeWebsiteProps {
-	url: string;
+  url: string;
 }
 
 /**
@@ -14,28 +14,28 @@ interface IExcludeWebsiteProps {
  */
 export default function ExcludedWebsite(props: IExcludeWebsiteProps) {
 
-	function onDelete(): void {
-		if (!isDebug) {
-			chrome.storage.sync.get(Settings.ExcludedWebsites, (data) => {
-				const list = (data?.[Settings.ExcludedWebsites] ?? []).filter((url: string) => url !== props.url);
-				chrome.storage.sync.set({ [Settings.ExcludedWebsites]: list });
-			});
-		}
-	}
+  function onDelete(): void {
+    if (!isDebug) {
+      chrome.storage.sync.get(Settings.ExcludedWebsites, (data) => {
+        const list = (data?.[Settings.ExcludedWebsites] ?? []).filter((url: string) => url !== props.url);
+        chrome.storage.sync.set({ [Settings.ExcludedWebsites]: list });
+      });
+    }
+  }
 
-	return <ListItem dense={true}>
-		<ListItemText
-			primary={props.url}
-		/>
-		<ListItemSecondaryAction>
-			<IconButton
-				edge="end"
-				aria-label="delete"
-				onClick={onDelete}
-			>
-				<DeleteIcon fontSize="small" />
-			</IconButton>
-		</ListItemSecondaryAction>
-	</ListItem>;
+  return <ListItem dense={true}>
+    <ListItemText
+      primary={props.url}
+    />
+    <ListItemSecondaryAction>
+      <IconButton
+        edge="end"
+        aria-label="delete"
+        onClick={onDelete}
+      >
+        <DeleteIcon fontSize="small" />
+      </IconButton>
+    </ListItemSecondaryAction>
+  </ListItem>;
 }
 

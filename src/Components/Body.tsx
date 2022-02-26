@@ -12,24 +12,24 @@ import TabToInsertSwitch from './TabToInsertSwitch';
  * @returns 
  */
 export function Body() {
-	return (
-		<div id="body" style={{ width: isOptions ? "600px" : undefined }}>
-			<Typography variant="h5" id="title">
-				Chrome Markdown emojis
-			</Typography>
-			<Divider />
-			<List>
-				<EnabledSwitch />
-				<DropdownSwitch />
-				<TabToInsertSwitch />
-				<InclusiveSearchSwitch />
-			</List>
-			<Divider />
-			<ExcludedWebsites />
-			<Divider />
-			<Typography variant="h4" id="icon">
-				🙃
-			</Typography>
-		</div>
-	);
+  return (
+    <div id="body" style={{ width: isOptions ? "600px" : undefined }}>
+      <Typography variant="h5" id="title">
+        Chrome Markdown emojis
+      </Typography>
+      <Divider />
+      <List>
+        <EnabledSwitch />
+        <DropdownSwitch />
+        <TabToInsertSwitch />
+        <InclusiveSearchSwitch />
+      </List>
+      <Divider />
+      <ExcludedWebsites />
+      <Divider />
+      <Typography variant="h4" id="icon">
+        🙃
+      </Typography>
+    </div>
+  );
 }

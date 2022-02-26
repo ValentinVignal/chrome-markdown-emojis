@@ -1,23 +1,23 @@
 export type Message = {
-	type: MessageTypes;
-	text: string;
+  type: MessageTypes;
+  text: string;
 
 }
 
 
 export enum MessageTypes {
-	ParseFullEmoji,
-	PartialEmoji,
+  ParseFullEmoji,
+  PartialEmoji,
 }
 
 export type ParseFullEmojiResponse = {
-	key?: string;
-	emoji?: string;
+  key?: string;
+  emoji?: string;
 }
 
 export type PartialEmojiResponse = {
-	key?: string;
-	emojis?: {
-		[key: string]: string,
-	};
+  key?: string;
+  emojis?: {
+    [key: string]: string,
+  };
 }

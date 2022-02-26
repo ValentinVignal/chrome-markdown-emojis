@@ -8,34 +8,34 @@ import { Settings } from "../shared/constants";
  * @returns 
  */
 export default function DropdownSwitch() {
-	const [enabled, setEnabled] = useState<boolean>(true);
+  const [enabled, setEnabled] = useState<boolean>(true);
 
-	useEffect(() => {
-		if (!isDebug) {
-			chrome.storage.sync.get(Settings.DropdownEnabled, (data) => {
-				setEnabled(data[Settings.DropdownEnabled] ?? true);
-			});
-		}
-	});
+  useEffect(() => {
+    if (!isDebug) {
+      chrome.storage.sync.get(Settings.DropdownEnabled, (data) => {
+        setEnabled(data[Settings.DropdownEnabled] ?? true);
+      });
+    }
+  });
 
-	return <ListItem>
-		<ListItemText
-			primary="Dropdown"
-		/>
-		<ListItemSecondaryAction>
-			<Switch
-				checked={enabled}
-				onChange={(event) => {
-					if (enabled === null && !isDebug) {
-						// It was not loaded
-						return;
-					}
-					if (!isDebug) {
-						chrome.storage.sync.set({ [Settings.DropdownEnabled]: event.target.checked });
-					}
-					setEnabled(event.target.checked);
-				}}
-			/>
-		</ListItemSecondaryAction>
-	</ListItem>;
+  return <ListItem>
+    <ListItemText
+      primary="Dropdown"
+    />
+    <ListItemSecondaryAction>
+      <Switch
+        checked={enabled}
+        onChange={(event) => {
+          if (enabled === null && !isDebug) {
+            // It was not loaded
+            return;
+          }
+          if (!isDebug) {
+            chrome.storage.sync.set({ [Settings.DropdownEnabled]: event.target.checked });
+          }
+          setEnabled(event.target.checked);
+        }}
+      />
+    </ListItemSecondaryAction>
+  </ListItem>;
 }

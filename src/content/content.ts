@@ -13,6 +13,7 @@ chrome.storage.sync.get(Settings.DropdownEnabled, (data) => {
   activate();
 });
 
+
 chrome.storage.sync.get(Settings.ExcludedWebsites, (data) => {
   setExcludedWebsites(data[Settings.ExcludedWebsites] ?? []);
 });
