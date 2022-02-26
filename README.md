@@ -23,3 +23,11 @@ Run the tests:
 ```
 npm test
 ```
+
+# Debug
+
+1. Launch the VSCode debug.
+2. Apply code changes.
+   1. Build with `npm run build`
+   2. Go to the browser extensions and reload this one.
+   3. Reload the page
