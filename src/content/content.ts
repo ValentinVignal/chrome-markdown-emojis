@@ -3,6 +3,10 @@ import { removeDropdown } from './dropdown';
 import { globals } from './globals';
 import { activate, deactivate } from './init';
 
+/*
+ `content.js` will be inserted in each pages/tabs of google chrome.
+ */
+
 chrome.storage.sync.get([Settings.Enabled, Settings.DropdownEnabled], (data) => {
   globals.settings[Settings.Enabled] = data[Settings.Enabled] ?? true;
   activate();

@@ -68,7 +68,7 @@ function getElementWithText(target: Element): Element | null {
  * 
  * Now it gets the window's selection, select the text to replace and 
  */
-function setFacebookText(toReplace: string, emoji: string): void {
+export function setFacebookText(toReplace: string, emoji: string): void {
   const selection = window.getSelection()!; // Get the current selection (selection with no length where the cursor is).
   const cursorPosition = selection.focusOffset;
 
