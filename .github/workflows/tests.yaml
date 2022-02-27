@@ -14,14 +14,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 16
+      - name: Use Node.js 14
         uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: 14
       - run: npm i
       - run: npm run test:coverage
         name: Run test with coverage
       - name: Upload to Codecov
         uses: codecov/codecov-action@v2
         with:
-          files: ./coverage/cobertura-coverage.xml
+          # This is the name of the coverage reporter.
+          # cspell:ignore cobertura
+          files: ./src/coverage/cobertura-coverage.xml

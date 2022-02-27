@@ -1,6 +1,10 @@
 import { Settings } from "../shared/constants";
 import { Message, MessageTypes, ParseFullEmojiResponse, PartialEmojiResponse } from "../types";
 
+/*
+ `background.js` is a unique file loaded by the chrome extension that runs in the background.
+ */
+
 
 const emojisMapUrl = 'https://raw.githubusercontent.com/markdown-it/markdown-it-emoji/master/lib/data/full.json';
 
