@@ -1,36 +1,36 @@
 {
-  "short_name": "Chrome Emojis",
-  "name": "Chrome markdown emojis",
-  "description": "Allow to use markdown emojis code like :tada: 🎉 in text inputs",
-  "manifest_version": 3,
-  "version": "0.7",
   "action": {
     "default_popup": "index.html",
     "default_title": "Open the popup"
   },
+  "background": {
+    "service_worker": "./static/js/background.js"
+  },
+  "content_scripts": [
+    {
+      "css": [
+        "./static/css/content.css"
+      ],
+      "js": [
+        "./static/js/content.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "description": "Allow to use markdown emojis code like :tada: 🎉 in text inputs",
   "icons": {
     "16": "logo192.png",
     "48": "logo192.png",
     "128": "logo192.png"
   },
+  "manifest_version": 3,
+  "name": "Chrome markdown emojis",
+  "options_page": "index.html#options",
   "permissions": [
     "storage"
   ],
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "./static/js/content.js"
-      ],
-      "css": [
-        "./static/css/content.css"
-      ]
-    }
-  ],
-  "background": {
-    "service_worker": "./static/js/background.js"
-  },
-  "options_page": "index.html#options"
+  "short_name": "Chrome Emojis",
+  "version": "0.8"
 }
