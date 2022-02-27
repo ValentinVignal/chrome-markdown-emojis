@@ -1,6 +1,9 @@
 {
-    "words": [
-        "Codecov",
-        "tada"
-    ]
+  "ignorePaths": [
+    "package.json"
+  ],
+  "words": [
+    "Codecov",
+    "tada"
+  ]
 }

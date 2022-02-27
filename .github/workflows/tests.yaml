@@ -24,4 +24,6 @@ jobs:
       - name: Upload to Codecov
         uses: codecov/codecov-action@v2
         with:
+          # This is the name of the coverage reporter.
+          # cspell:ignore cobertura
           files: ./coverage/cobertura-coverage.xml
