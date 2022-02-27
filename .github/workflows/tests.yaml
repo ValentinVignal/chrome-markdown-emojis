@@ -26,4 +26,4 @@ jobs:
         with:
           # This is the name of the coverage reporter.
           # cspell:ignore cobertura
-          files: ./coverage/cobertura-coverage.xml
+          files: ./src/coverage/cobertura-coverage.xml
