@@ -9,26 +9,26 @@ A Google Chrome extension to insert emojis from their markdown code.
 Install dependencies:
 
 ```zch
-npm i
+yarn install
 ```
 
 Build: 
 
 ```
-npm run build
+yarn build
 ```
 
 Run the tests:
 
 ```
-npm test
+yarn test
 ```
 
 # Debug
 
 1. Launch the VSCode debug.
 2. Apply code changes.
-   1. Build with `npm run build`
+   1. Build with `yarn build`
    2. Go to the browser extensions and reload this one.
    3. Reload the page
 
