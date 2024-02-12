@@ -31,5 +31,3 @@ yarn test
    1. Build with `yarn build`
    2. Go to the browser extensions and reload this one.
    3. Reload the page
-
-:warning: Use node 14 because `node-sass` is not ready for node 16 yet :warning: 

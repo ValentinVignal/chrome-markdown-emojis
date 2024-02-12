@@ -6,7 +6,7 @@ import { Message, MessageTypes, ParseFullEmojiResponse, PartialEmojiResponse } f
  */
 
 
-const emojisMapUrl = 'https://raw.githubusercontent.com/markdown-it/markdown-it-emoji/master/lib/data/full.json';
+const emojisMapUrl = 'https://raw.githubusercontent.com/markdown-it/markdown-it-emoji/master/lib/data/full.mjs';
 
 
 let inclusiveSearch = false;
@@ -36,7 +36,8 @@ let emojisMap: { [key: string]: string };
 async function fetchEmojisMap(): Promise<void> {
   try {
     const response = await fetch(emojisMapUrl);
-    emojisMap = await response.json();
+    const text = await response.text();
+    emojisMap = JSON.parse(text.split('export default ')[1]);
   } catch (error) {
     console.log('Could not download emoji map from', emojisMapUrl, error);
   }
