@@ -1,15 +1,15 @@
-import { Divider, List, Typography } from '@material-ui/core';
-import { isOptions } from '../globals';
-import './Body.scss';
-import DropdownSwitch from './DropdownSwitch';
+import { Box, Divider, List, Typography } from "@material-ui/core";
+import packageJson from "../../package.json";
+import { isOptions } from "../globals";
+import "./Body.scss";
+import DropdownSwitch from "./DropdownSwitch";
 import EnabledSwitch from "./EnableSwitch";
-import ExcludedWebsites from './ExcludedWebsites';
-import InclusiveSearchSwitch from './InclusiveSearchSwitch';
-import TabToInsertSwitch from './TabToInsertSwitch';
+import ExcludedWebsites from "./ExcludedWebsites";
+import InclusiveSearchSwitch from "./InclusiveSearchSwitch";
+import TabToInsertSwitch from "./TabToInsertSwitch";
 
 /**
  *  Body of the popup
- * @returns 
  */
 export function Body() {
   return (
@@ -30,6 +30,9 @@ export function Body() {
       <Typography variant="h4" id="icon">
         🙃
       </Typography>
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Typography variant="caption">{packageJson.version}</Typography>
+      </Box>
     </div>
   );
 }
