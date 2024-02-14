@@ -9,11 +9,13 @@ import { onKeyUp } from "./onKeyUp";
 export function activate(): void {
   deactivate(true);
   const currentUrl = window.location.href;
-  const isExcluded = globals.settings[Settings.ExcludedWebsites].some((regExp) => !!currentUrl.match(regExp)?.length);
+  const isExcluded = globals.settings[Settings.ExcludedWebsites].some(
+    (regExp) => !!currentUrl.match(regExp)?.length
+  );
   if (globals.settings.enabled && !isExcluded) {
-    document.addEventListener('keyup', onKeyUp);
-    document.addEventListener('scroll', onScroll);
-    window.addEventListener('resize', onResizeWindow);
+    document.addEventListener("keyup", onKeyUp);
+    document.addEventListener("scroll", onScroll);
+    window.addEventListener("resize", onResizeWindow);
   }
 }
 
@@ -21,9 +23,9 @@ export function activate(): void {
  * Remove the listeners
  */
 export function deactivate(shouldNotRemoveDropdown: boolean = false): void {
-  document.removeEventListener('keyup', onKeyUp);
-  document.removeEventListener('scroll', onScroll);
-  window.removeEventListener('resize', onResizeWindow);
+  document.removeEventListener("keyup", onKeyUp);
+  document.removeEventListener("scroll", onScroll);
+  window.removeEventListener("resize", onResizeWindow);
   if (!shouldNotRemoveDropdown) {
     removeDropdown();
   }
