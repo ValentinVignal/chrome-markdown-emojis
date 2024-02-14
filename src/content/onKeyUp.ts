@@ -1,8 +1,16 @@
-import { Message, MessageTypes, ParseFullEmojiResponse, PartialEmojiResponse } from "../types";
+import {
+  Message,
+  MessageTypes,
+  ParseFullEmojiResponse,
+  PartialEmojiResponse,
+} from "../types";
 import { removeDropdown } from "./dropdown";
 import { fullEmojiRegExp, globals, partialEmojiRegExp } from "./globals";
 import { getCursorPosition, getText } from "./handleText";
-import { parseFullEmojiResponseCallback, partialEmojiResponseCallback } from "./responseCallbacks";
+import {
+  parseFullEmojiResponseCallback,
+  partialEmojiResponseCallback,
+} from "./responseCallbacks";
 
 /**
  *
@@ -12,10 +20,9 @@ import { parseFullEmojiResponseCallback, partialEmojiResponseCallback } from "./
  * @returns
  */
 export function onKeyUp(event: KeyboardEvent): void {
-  if (event.key === 'Escape') {
+  if (event.key === "Escape") {
     return removeDropdown();
   }
-
 
   const _target = event.target;
 
@@ -24,7 +31,7 @@ export function onKeyUp(event: KeyboardEvent): void {
     return;
   }
   globals.target = _target;
-  const newText = getText(globals.target);	// The text to work on
+  const newText = getText(globals.target); // The text to work on
   if (newText === globals.text) {
     // No change
     return;
@@ -42,35 +49,38 @@ export function onKeyUp(event: KeyboardEvent): void {
 
   try {
     if (couldBeFullEmoji) {
-
       // It might be an emoji!
-      chrome.runtime.sendMessage<Message, ParseFullEmojiResponse>({
-        type: MessageTypes.ParseFullEmoji,
-        text: fullEmojiMatch[0].split(':')[1],
-      }, (response) => {
-        if (!response) return;
-        try {
-          parseFullEmojiResponseCallback(response);
-        } catch (error) {
-          console.log('Error receiving the message', response, error);
+      chrome.runtime.sendMessage<Message, ParseFullEmojiResponse>(
+        {
+          type: MessageTypes.ParseFullEmoji,
+          text: fullEmojiMatch[0].split(":")[1],
+        },
+        (response) => {
+          if (!response) return;
+          try {
+            parseFullEmojiResponseCallback(response);
+          } catch (error) {
+            console.log("Error receiving the message", response, error);
+          }
         }
-      });
+      );
     } else if (couldBePartialEmoji && globals.settings.dropdownEnabled) {
-      chrome.runtime.sendMessage<Message, PartialEmojiResponse>({
-        type: MessageTypes.PartialEmoji,
-        text: partialEmojiMatch[0].split(':')[1],
-      }, (response) => {
-        try {
-          partialEmojiResponseCallback(response);
-        } catch (error) {
-          console.log('Error receiving the message', response, error);
+      chrome.runtime.sendMessage<Message, PartialEmojiResponse>(
+        {
+          type: MessageTypes.PartialEmoji,
+          text: partialEmojiMatch[0].split(":")[1],
+        },
+        (response) => {
+          try {
+            partialEmojiResponseCallback(response);
+          } catch (error) {
+            console.log("Error receiving the message", response, error);
+          }
         }
-      })
+      );
     }
   } catch (error) {
     removeDropdown();
-    console.log('Error listening to keyup', error);
+    console.log("Error listening to keyup", error);
   }
 }
-
-
