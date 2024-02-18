@@ -1,5 +1,4 @@
-import { globals } from './globals';
-
+import { globals } from "./globals";
 
 /**
  * @description Get the text value from the target
@@ -9,13 +8,17 @@ import { globals } from './globals';
 export function getText(target: EventTarget): string {
   if (target instanceof Element) {
     if (target instanceof HTMLElement) {
-      if (target instanceof HTMLInputElement) {
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement
+      ) {
         return target.value;
       }
-      return target.innerText ?? '';
+      return target.innerText ?? "";
     }
-    return target.textContent ?? '';
-  } return '';
+    return target.textContent ?? "";
+  }
+  return "";
 }
 
 /**
@@ -28,7 +31,10 @@ export function setText(newText: string): void {
     const targetWithText = getElementWithText(globals.target);
     if (!targetWithText || !(targetWithText instanceof Element)) return;
     if (targetWithText instanceof HTMLElement) {
-      if (targetWithText instanceof HTMLInputElement) {
+      if (
+        targetWithText instanceof HTMLInputElement ||
+        targetWithText instanceof HTMLTextAreaElement
+      ) {
         targetWithText.value = newText;
       } else {
         targetWithText.innerText = newText;
@@ -48,7 +54,8 @@ function getElementWithText(target: Element): Element | null {
   // It has children
   for (let i = 0; i < target.children.length; i++) {
     const element = target.children[i];
-    if (element.textContent === globals.text) return getElementWithText(element);
+    if (element.textContent === globals.text)
+      return getElementWithText(element);
   }
 
   return null;
@@ -63,23 +70,28 @@ function getElementWithText(target: Element): Element | null {
  * target.dispatchEvent(new InputEvent('input', {bubbles: true}));
  * ```
  * But it stopped working for some reasons.
- * 
+ *
  * ---
- * 
- * Now it gets the window's selection, select the text to replace and 
+ *
+ * Now it gets the window's selection, select the text to replace and
  */
-export function setFacebookText(toReplace: string, emoji: string): void {
+export function setFacebookText(
+  toReplace: string,
+  emoji: string,
+  cursorPosition?: number
+): void {
   const selection = window.getSelection()!; // Get the current selection (selection with no length where the cursor is).
-  const cursorPosition = selection.focusOffset;
+
+  cursorPosition ??= selection.focusOffset;
 
   const focusNode = selection.focusNode!;
   const doc = focusNode.ownerDocument!;
 
-  const range = new Range();    // Range around the text to replace.
+  const range = new Range(); // Range around the text to replace.
   range.setStart(focusNode, cursorPosition - toReplace.length);
   range.setEnd(focusNode, cursorPosition);
 
-  selection.removeAllRanges();  // Remove the ranges from the selection (ex: current cursor position).
+  selection.removeAllRanges(); // Remove the ranges from the selection (ex: current cursor position).
 
   selection.addRange(range); // The created range is added to the selection, so the word to replace is selected.
 
@@ -94,30 +106,45 @@ export function setFacebookText(toReplace: string, emoji: string): void {
   // `execCommand` is deprecated but still useful for inserting text as it is
   // not supported by the the clipboard API:
   // https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
-  doc.execCommand('insertText', false, emoji.slice(0, emoji.length - 1));
-  doc.execCommand('insertText', false, ' ');
-
+  doc.execCommand("insertText", false, emoji.slice(0, emoji.length - 1));
+  doc.execCommand("insertText", false, " ");
 }
+
+const isFacebook = (): boolean => {
+  return document.body?.parentElement?.id === "facebook";
+};
+
+const isInstagram = (): boolean => {
+  return window.location.href.includes("www.instagram.com");
+};
 
 /**
  * Replace the emoji in the text field.
  */
-export function replaceEmoji(toReplace: string, emoji: string, cursorPosition?: number | null): void {
-  if (document.body?.parentElement?.id === 'facebook') {
-    return setFacebookText(toReplace, emoji);
+export function replaceEmoji(
+  toReplace: string,
+  emoji: string,
+  cursorPosition?: number
+): void {
+  console;
+  if (isFacebook() || isInstagram()) {
+    return setFacebookText(toReplace, emoji, cursorPosition);
   } else {
-    cursorPosition ??= globals.cursorPosition;
+    // cursorPosition ??= globals.cursorPosition;
     const slicedText = globals.text.slice(0, globals.cursorPosition!);
     const newSlicedText = [
       slicedText.slice(0, slicedText.length - toReplace.length),
       emoji,
-    ].join('');
+    ].join("");
     const newValue = [
       newSlicedText,
       globals.text.slice(globals.cursorPosition!),
-    ].join('');
+    ].join("");
     setText(newValue);
-    if (globals.target instanceof HTMLInputElement) {
+    if (
+      globals.target instanceof HTMLInputElement ||
+      globals.target instanceof HTMLTextAreaElement
+    ) {
       const newCursorPosition = newSlicedText.length;
       globals.target.setSelectionRange(newCursorPosition, newCursorPosition);
     }
@@ -125,9 +152,14 @@ export function replaceEmoji(toReplace: string, emoji: string, cursorPosition?: 
 }
 
 export function getCursorPosition(): void {
-  if (globals.target instanceof HTMLInputElement) {
-    globals.cursorPosition = globals.target.selectionStart ?? globals.cursorPosition;
+  if (
+    globals.target instanceof HTMLInputElement ||
+    globals.target instanceof HTMLTextAreaElement
+  ) {
+    globals.cursorPosition =
+      globals.target.selectionStart ?? globals.cursorPosition;
   } else {
-    globals.cursorPosition = window.getSelection()?.focusOffset ?? globals.cursorPosition;
+    globals.cursorPosition =
+      window.getSelection()?.focusOffset ?? globals.cursorPosition;
   }
 }

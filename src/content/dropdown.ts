@@ -148,7 +148,12 @@ function onKeyDown(event: KeyboardEvent) {
 /**
  * Insert the emoji and closes the dropdown.
  */
-function onClick(input: { target: HTMLElement, text: string, emoji: string, cursorPosition: number }): void {
+function onClick(input: {
+  target: HTMLElement;
+  text: string;
+  emoji: string;
+  cursorPosition: number;
+}): void {
   const slicedText = input.text.slice(0, input.cursorPosition);
   const splits = slicedText.split(":");
   const partialKey = splits[splits.length - 1];
