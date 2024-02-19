@@ -28,13 +28,13 @@ describe("handleText", () => {
       expect(Range.prototype.setEnd).toHaveBeenCalledWith(focusNode, 20);
       expect(selection.removeAllRanges).toHaveBeenCalledTimes(1);
       expect(document.execCommand).toHaveBeenCalledTimes(2);
-      expect(document.execCommand).toHaveBeenCalledWith(
+      expect(document.execCommand).toHaveBeenNthCalledWith(
         1,
         "insertText",
         false,
         "emoji"
       );
-      expect(document.execCommand).toHaveBeenCalledWith(
+      expect(document.execCommand).toHaveBeenNthCalledWith(
         2,
         "insertText",
         false,
