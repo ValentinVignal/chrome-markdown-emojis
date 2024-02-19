@@ -27,3 +27,4 @@ jobs:
           # This is the name of the coverage reporter.
           # cspell:ignore cobertura
           files: ./src/coverage/cobertura-coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
