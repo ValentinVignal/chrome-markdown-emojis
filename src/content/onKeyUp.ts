@@ -25,7 +25,6 @@ export function onKeyUp(event: KeyboardEvent): void {
   }
 
   const _target = event.target;
-  console.log("target", _target);
 
   if (!_target || !(_target instanceof HTMLElement)) {
     globals.target = null;
@@ -33,7 +32,6 @@ export function onKeyUp(event: KeyboardEvent): void {
   }
   globals.target = _target;
   const newText = getText(globals.target); // The text to work on
-  console.log("newText", newText);
   if (newText === globals.text) {
     // No change
     return;
@@ -67,7 +65,6 @@ export function onKeyUp(event: KeyboardEvent): void {
         }
       );
     } else if (couldBePartialEmoji && globals.settings.dropdownEnabled) {
-      console.log("partialEmojiMatch", partialEmojiMatch[0].split(":")[1]);
       chrome.runtime.sendMessage<Message, PartialEmojiResponse>(
         {
           type: MessageTypes.PartialEmoji,
