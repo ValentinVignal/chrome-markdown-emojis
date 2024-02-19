@@ -30,12 +30,12 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
 /**
  * Map of emojis: emoji code => emoji
  */
-let emojisMap: { [key: string]: string };
+export let emojisMap: { [key: string]: string };
 
 /**
  * Downloads the emoji map
  */
-async function fetchEmojisMap(): Promise<void> {
+export async function fetchEmojisMap(): Promise<void> {
   try {
     const response = await fetch(emojisMapUrl);
     const text = await response.text();
@@ -113,4 +113,5 @@ function inclusiveSort(keyA: string, keyB: string, text: string): number {
   return 0;
 }
 
-export {};
+export { };
+
