@@ -113,5 +113,4 @@ function inclusiveSort(keyA: string, keyB: string, text: string): number {
   return 0;
 }
 
-export { };
-
+export {};
