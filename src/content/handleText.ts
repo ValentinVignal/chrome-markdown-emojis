@@ -118,6 +118,10 @@ const isInstagram = (): boolean => {
   return window.location.href.includes("www.instagram.com");
 };
 
+const isTwitter = (): boolean => {
+  return window.location.href.includes("x.com");
+};
+
 /**
  * Replace the emoji in the text field.
  */
@@ -126,8 +130,7 @@ export function replaceEmoji(
   emoji: string,
   cursorPosition?: number
 ): void {
-  console;
-  if (isFacebook() || isInstagram()) {
+  if (isFacebook() || isInstagram() || isTwitter()) {
     return setFacebookText(toReplace, emoji, cursorPosition);
   } else {
     // cursorPosition ??= globals.cursorPosition;
