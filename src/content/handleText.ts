@@ -1,4 +1,5 @@
 import { globals } from "./globals";
+import { safeSliceText, safeTextLength } from "./utils";
 
 /**
  * @description Get the text value from the target
@@ -133,15 +134,15 @@ export function replaceEmoji(
   if (isFacebook() || isInstagram() || isTwitter()) {
     return setFacebookText(toReplace, emoji, cursorPosition);
   } else {
-    // cursorPosition ??= globals.cursorPosition;
-    const slicedText = globals.text.slice(0, globals.cursorPosition!);
+    const slicedText = safeSliceText(globals.text, globals.cursorPosition!);
     const newSlicedText = [
-      slicedText.slice(0, slicedText.length - toReplace.length),
+      safeSliceText(slicedText, safeTextLength(slicedText) - toReplace.length),
+      safeSliceText(slicedText, safeTextLength(slicedText) - toReplace.length),
       emoji,
     ].join("");
     const newValue = [
       newSlicedText,
-      globals.text.slice(globals.cursorPosition!),
+      safeSliceText(globals.text, globals.cursorPosition!),
     ].join("");
     setText(newValue);
     if (

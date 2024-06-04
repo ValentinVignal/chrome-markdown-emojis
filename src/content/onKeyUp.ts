@@ -11,6 +11,7 @@ import {
   parseFullEmojiResponseCallback,
   partialEmojiResponseCallback,
 } from "./responseCallbacks";
+import { safeSliceText } from "./utils";
 
 /**
  *
@@ -38,7 +39,7 @@ export function onKeyUp(event: KeyboardEvent): void {
   }
   globals.text = newText;
   getCursorPosition();
-  const slicedText = globals.text.slice(0, globals.cursorPosition!);
+  const slicedText = safeSliceText(globals.text, globals.cursorPosition);
   const fullEmojiMatch = slicedText.match(fullEmojiRegExp);
   const partialEmojiMatch = slicedText.match(partialEmojiRegExp);
   const couldBeFullEmoji = !!fullEmojiMatch?.length;

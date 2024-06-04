@@ -10,6 +10,7 @@ import {
   padding,
 } from "./globals";
 import { replaceEmoji } from "./handleText";
+import { safeSliceText } from "./utils";
 
 /**
  * Rebuild the dropdown
@@ -154,7 +155,7 @@ function onClick(input: {
   emoji: string;
   cursorPosition: number;
 }): void {
-  const slicedText = input.text.slice(0, input.cursorPosition);
+  const slicedText = safeSliceText(input.text, input.cursorPosition);
   const splits = slicedText.split(":");
   const partialKey = splits[splits.length - 1];
   input.target.focus(); // For Facebook, we need to focus before modifying the text and dispatching the event
