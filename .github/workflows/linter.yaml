@@ -12,7 +12,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm i
+      - run: yarn install
       - name: eslint
         # This is the name of the author of the github action.
         # cspell:ignore reviewdog
