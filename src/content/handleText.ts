@@ -76,11 +76,11 @@ function getElementWithText(target: Element): Element | null {
  *
  * Now it gets the window's selection, select the text to replace and
  */
-export function setFacebookText(
+export const setFacebookText = (
   toReplace: string,
   emoji: string,
   cursorPosition?: number
-): void {
+): void => {
   const selection = window.getSelection()!; // Get the current selection (selection with no length where the cursor is).
 
   cursorPosition ??= selection.focusOffset;
@@ -109,17 +109,17 @@ export function setFacebookText(
   // https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
   doc.execCommand("insertText", false, emoji.slice(0, emoji.length - 1));
   doc.execCommand("insertText", false, " ");
-}
+};
 
-const isFacebook = (): boolean => {
+export const isFacebook = (): boolean => {
   return document.body?.parentElement?.id === "facebook";
 };
 
-const isInstagram = (): boolean => {
+export const isInstagram = (): boolean => {
   return window.location.href.includes("www.instagram.com");
 };
 
-const isTwitter = (): boolean => {
+export const isTwitter = (): boolean => {
   return window.location.href.includes("x.com");
 };
 
@@ -132,7 +132,7 @@ export function replaceEmoji(
   cursorPosition?: number
 ): void {
   if (isFacebook() || isInstagram() || isTwitter()) {
-    return setFacebookText(toReplace, emoji, cursorPosition);
+    setFacebookText(toReplace, emoji, cursorPosition);
   } else {
     const slicedText = safeSliceText(globals.text, globals.cursorPosition!);
     const newSlicedText = [
