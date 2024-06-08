@@ -6,7 +6,7 @@
       "request": "launch",
       "name": "Launch Chrome",
       // "url": "https://www.google.com/",
-      "url": "https://www.facebook.com/",
+      "url": "https://www.x.com/",
       // Here it is!
       "runtimeArgs": [
         "--load-extension=${workspaceFolder}/build"

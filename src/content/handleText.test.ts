@@ -1,4 +1,4 @@
-import { setFacebookText } from "./handleText";
+import * as handleText from "./handleText";
 
 describe("handleText", () => {
   describe("setFacebookText", () => {
@@ -20,7 +20,7 @@ describe("handleText", () => {
       jest.spyOn(Range.prototype, "setStart").mockImplementation(() => {});
       jest.spyOn(Range.prototype, "setEnd").mockImplementation(() => {});
 
-      setFacebookText("textToReplace", "emoji ");
+      handleText.setFacebookText("textToReplace", "emoji ");
 
       expect(Range.prototype.setStart).toHaveBeenCalledTimes(1);
       expect(Range.prototype.setStart).toHaveBeenCalledWith(focusNode, 7);
@@ -39,6 +39,24 @@ describe("handleText", () => {
         "insertText",
         false,
         " "
+      );
+    });
+  });
+
+  describe("replaceEmoji", () => {
+    test("It should call setFacebookText on twitter", () => {
+      const setFacebookTextSpy = jest
+        .spyOn(handleText, "setFacebookText")
+        .mockReturnValue();
+      jest.spyOn(handleText, "isFacebook").mockReturnValue(true);
+
+      handleText.replaceEmoji("textToReplace", "emoji", 10);
+
+      expect(setFacebookTextSpy).toHaveBeenCalledTimes(1);
+      expect(setFacebookTextSpy).toHaveBeenCalledWith(
+        "textToReplace",
+        "emoji",
+        10
       );
     });
   });

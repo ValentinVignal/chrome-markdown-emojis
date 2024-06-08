@@ -1,4 +1,5 @@
 import { globals } from "./globals";
+import { safeSliceText, safeTextLength } from "./utils";
 
 /**
  * @description Get the text value from the target
@@ -75,11 +76,11 @@ function getElementWithText(target: Element): Element | null {
  *
  * Now it gets the window's selection, select the text to replace and
  */
-export function setFacebookText(
+export const setFacebookText = (
   toReplace: string,
   emoji: string,
   cursorPosition?: number
-): void {
+): void => {
   const selection = window.getSelection()!; // Get the current selection (selection with no length where the cursor is).
 
   cursorPosition ??= selection.focusOffset;
@@ -108,14 +109,18 @@ export function setFacebookText(
   // https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
   doc.execCommand("insertText", false, emoji.slice(0, emoji.length - 1));
   doc.execCommand("insertText", false, " ");
-}
+};
 
-const isFacebook = (): boolean => {
+export const isFacebook = (): boolean => {
   return document.body?.parentElement?.id === "facebook";
 };
 
-const isInstagram = (): boolean => {
+export const isInstagram = (): boolean => {
   return window.location.href.includes("www.instagram.com");
+};
+
+export const isTwitter = (): boolean => {
+  return window.location.href.includes("x.com");
 };
 
 /**
@@ -126,19 +131,18 @@ export function replaceEmoji(
   emoji: string,
   cursorPosition?: number
 ): void {
-  console;
-  if (isFacebook() || isInstagram()) {
-    return setFacebookText(toReplace, emoji, cursorPosition);
+  if (isFacebook() || isInstagram() || isTwitter()) {
+    setFacebookText(toReplace, emoji, cursorPosition);
   } else {
-    // cursorPosition ??= globals.cursorPosition;
-    const slicedText = globals.text.slice(0, globals.cursorPosition!);
+    const slicedText = safeSliceText(globals.text, globals.cursorPosition!);
     const newSlicedText = [
-      slicedText.slice(0, slicedText.length - toReplace.length),
+      safeSliceText(slicedText, safeTextLength(slicedText) - toReplace.length),
+      safeSliceText(slicedText, safeTextLength(slicedText) - toReplace.length),
       emoji,
     ].join("");
     const newValue = [
       newSlicedText,
-      globals.text.slice(globals.cursorPosition!),
+      safeSliceText(globals.text, globals.cursorPosition!),
     ].join("");
     setText(newValue);
     if (
