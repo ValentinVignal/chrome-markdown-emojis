@@ -1,6 +1,6 @@
 {
   "name": "chrome-markdown-emojis",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "private": true,
   "dependencies": {
     "@craco/craco": "^7.1.0",
