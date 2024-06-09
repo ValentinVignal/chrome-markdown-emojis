@@ -1,4 +1,4 @@
-import { Box, Divider, List, Typography } from "@material-ui/core";
+import { Box, Divider, List, Typography } from "@mui/material";
 import packageJson from "../../package.json";
 import { isOptions } from "../globals";
 import "./Body.scss";

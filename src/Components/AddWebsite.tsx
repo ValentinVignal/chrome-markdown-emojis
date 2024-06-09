@@ -1,6 +1,6 @@
 
-import { IconButton, ListItem, ListItemSecondaryAction, TextField } from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
+import { IconButton, ListItem, ListItemSecondaryAction, TextField } from "@mui/material";
 import { useState } from "react";
 import { isDebug } from "../globals";
 import { Settings } from "../shared/constants";

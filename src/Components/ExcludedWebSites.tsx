@@ -1,4 +1,4 @@
-import { List, Typography } from "@material-ui/core";
+import { List, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { isDebug, isOptions } from "../globals";
 import { Settings } from "../shared/constants";
