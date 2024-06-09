@@ -1,6 +1,6 @@
 import {
   createTheme, CssBaseline, ThemeProvider, useMediaQuery
-} from '@material-ui/core';
+} from '@mui/material';
 import React from 'react';
 import './App.scss';
 import { Body } from './Components/Body';
@@ -11,7 +11,7 @@ function App() {
   const theme = React.useMemo(
     () => createTheme({
       palette: {
-        type: prefersDarkMode ? 'dark' : 'light',
+        mode: prefersDarkMode ? 'dark' : 'light',
       },
     }),
     [prefersDarkMode],

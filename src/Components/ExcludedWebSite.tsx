@@ -1,5 +1,5 @@
-import { IconButton, ListItem, ListItemSecondaryAction, ListItemText } from "@material-ui/core";
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton, ListItem, ListItemSecondaryAction, ListItemText } from "@mui/material";
 import { isDebug } from "../globals";
 import { Settings } from "../shared/constants";
 
